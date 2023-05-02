@@ -1,6 +1,6 @@
 [package]
 name = "cargo-px"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 keywords = ["cargo", "generator", "build", "scripts", "generate"]
 description = "A cargo sub-command to overcome some of the limitations of build scripts for code generation."
