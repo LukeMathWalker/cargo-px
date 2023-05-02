@@ -26,7 +26,8 @@ Check out the [announcement post](https://lpalmieri.com/posts/cargo-px) to learn
 # Table of Contents
 0. [How to install](#how-to-install)
 1. [How to use](#how-to-use)
-2. [License](#license)
+2. [Verify that the generated code is up-to-date](#verify-that-the-generated-code-is-up-to-date)
+3. [License](#license)
 
 ## How To Install 
 
@@ -70,6 +71,19 @@ If there are multiple crates that need to be code-generated, `cargo-px` will inv
 
 - `CARGO_PX_GENERATED_PKG_MANIFEST_PATH`, the path to the `Cargo.toml` file of the crate that needs to be generated;
 - `CARGO_PX_WORKSPACE_ROOT_DIR`, the path to the `Cargo.toml` file that defines the current workspace (i.e. the one that contains the `[workspace]` section).
+
+## Verify that the generated code is up-to-date
+
+If you are committing the generated code, it might be desirable to verify in CI that it's up-to-date.  
+You can do so by running:
+
+```bash
+# Triggers code-generation and verifies that the code compiles
+cargo px check
+# Returns an error if the code generation step created new files or 
+# modified any of the files tracked by `git` in version control
+git diff --quiet HEAD || (echo "The code-generated crates are stale. Re-run 'cargo px check locally and commit the results" && exit 1)
+```
 
 ## License
 
