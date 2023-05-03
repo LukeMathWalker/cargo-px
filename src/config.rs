@@ -1,4 +1,4 @@
-//! The configuration that `px` expects to find in the `Cargo.toml` manifests of 
+//! The configuration that `px` expects to find in the `Cargo.toml` manifests of
 //! the packages that require code generation.
 
 #[derive(Debug, serde::Serialize, serde::Deserialize)]

@@ -157,7 +157,8 @@ fn cyclic_dependency_error(
     graph: &StableDiGraph<PackageId, EdgeMetadata>,
 ) -> anyhow::Error {
     let mut error_msg = "There is a cyclic dependency in your workspace: this is not allowed!\n\
-        The cycle looks like this:".to_string();
+        The cycle looks like this:"
+        .to_string();
     for (i, node_id) in cycle.iter().enumerate() {
         writeln!(&mut error_msg).unwrap();
         let dependent_id = if i == 0 {
@@ -179,7 +180,7 @@ fn cyclic_dependency_error(
         )
         .unwrap();
     }
-    anyhow::anyhow!(error_msg) 
+    anyhow::anyhow!(error_msg)
 }
 
 /// Return all the cycles in the graph.
