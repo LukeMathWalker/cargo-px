@@ -25,17 +25,22 @@ pub fn codegen(cargo_path: &str) -> Result<(), Vec<anyhow::Error>> {
 }
 
 #[tracing::instrument(name = "Generate crate", skip_all, fields(crate_name = %unit.package_metadata.name()))]
-fn generate_crate(unit: &codegen_unit::CodegenUnit, cargo_path: &str, workspace_path: &Path) -> Result<(), anyhow::Error> {
+fn generate_crate(
+    unit: &codegen_unit::CodegenUnit,
+    cargo_path: &str,
+    workspace_path: &Path,
+) -> Result<(), anyhow::Error> {
     let mut cmd = unit.command(cargo_path);
-    cmd
-        .env("CARGO_PX_WORKSPACE_ROOT_DIR", workspace_path)
+    cmd.env("CARGO_PX_WORKSPACE_ROOT_DIR", workspace_path)
         .stdout(std::process::Stdio::inherit())
         .stderr(std::process::Stdio::inherit());
 
-    let err_msg = || format!(
+    let err_msg = || {
+        format!(
         "Failed to execute code generator for package `{}`.\nCheck the output above to diagnose what went wrong.",
         unit.package_metadata.name()
-    );
+    )
+    };
 
     let status = cmd.status().with_context(err_msg)?;
     if !status.success() {
