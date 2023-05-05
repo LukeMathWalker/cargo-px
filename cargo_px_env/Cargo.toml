@@ -1,0 +1,9 @@
+[package]
+name = "cargo_px_env"
+version = "0.1.0"
+edition = "2021"
+keywords = ["cargo", "cargo-px", "build", "scripts", "generate"]
+description = "Bindings to retrieve the environment variables set by cargo-px"
+categories = ["development-tools::cargo-plugins"]
+repository = "https://github.com/LukeMathWalker/cargo-px"
+license = "Apache-2.0 OR MIT"

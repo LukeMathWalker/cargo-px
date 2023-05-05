@@ -72,6 +72,8 @@ If there are multiple crates that need to be code-generated, `cargo-px` will inv
 - `CARGO_PX_GENERATED_PKG_MANIFEST_PATH`, the path to the `Cargo.toml` file of the crate that needs to be generated;
 - `CARGO_PX_WORKSPACE_ROOT_DIR`, the path to the `Cargo.toml` file that defines the current workspace (i.e. the one that contains the `[workspace]` section).
 
+You can use the [`cargo_px_env`](https://crates.io/crates/cargo_px_env) crate to retrieve and work with these environment variables.
+
 ## Verify that the generated code is up-to-date
 
 If you are committing the generated code, it might be desirable to verify in CI that it's up-to-date.  
