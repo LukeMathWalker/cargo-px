@@ -1,3 +1,6 @@
+[workspace]
+members = [".", "cargo_px_env"]
+
 [package]
 name = "cargo-px"
 version = "0.1.2"
