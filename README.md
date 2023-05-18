@@ -37,6 +37,14 @@ You can install `cargo-px` from [crates.io](https://crates.io) with
 cargo install cargo-px --locked
 ```
 
+### MacOS
+
+If you're using a macOS machine, you probably want to [disable gatekeeper notarisation for your terminal](https://apple.stackexchange.com/questions/403184/disable-gatekeeper-notarisation-check-without-disabling-sip/403185#403185).  
+
+Every time you execute a binary for the first time, Apple [executes a request over the network to their servers](https://sigpipe.macromates.com/2020/macos-catalina-slow-by-design/). This becomes an issue for `cargo-px`, since it must compile your generator and then execute it: the generator binary is "new", therefore it incurs the penalty of this notarisation check.  
+The magnitude of the delay depends on the quality of your connection as well as on Apple's servers performance. On a good Internet connection, I consistenly observed 100/150ms delays, but delays in the order of seconds have been reported as well.  
+Fun aside: if you're working without an Internet connection, Apple skips the check entirely and lets you execute unverified binaries without any complaint.
+
 ## How to use
 
 It is designed as a **`cargo` proxy**: instead of invoking `cargo <CMD> <ARGS>`, you go for `cargo px <CMD> <ARGS>`. For example, you go for `cargo px build --all-features` instead of `cargo build --all-features`.
