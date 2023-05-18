@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.4](https://github.com/LukeMathWalker/cargo-px/compare/cargo-px-v0.1.3...cargo-px-v0.1.4) - 2023-05-18
+
+### Other
+- MacOS gatekeeper.
+- release (#7)
+- Add `cargo_px_env` (#6)
+- Add CI configuration (#1)
+- (cargo-release) version 0.1.2
+- Add instructions for CI.
+- Initial release
+
 ## [0.1.3](https://github.com/LukeMathWalker/cargo-px/compare/cargo-px-v0.1.2...cargo-px-v0.1.3) - 2023-05-05
 
 ### Other
