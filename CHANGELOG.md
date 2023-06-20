@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.5](https://github.com/LukeMathWalker/cargo-px/compare/cargo-px-v0.1.4...cargo-px-v0.1.5) - 2023-06-20
+
+### Other
+- Display the entire error chain when reporting an unexpected error. ([#10](https://github.com/LukeMathWalker/cargo-px/pull/10))
+
 ## [0.1.4](https://github.com/LukeMathWalker/cargo-px/compare/cargo-px-v0.1.3...cargo-px-v0.1.4) - 2023-05-18
 
 ### Other
