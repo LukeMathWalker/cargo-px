@@ -1,5 +1,5 @@
+use std::fmt::Write;
 use std::process::{exit, Command};
-
 use tracing::metadata::LevelFilter;
 use tracing_subscriber::{fmt::format::FmtSpan, EnvFilter};
 
@@ -40,7 +40,11 @@ fn main() {
         {
             if let Err(errors) = cargo_px::codegen(&cargo_path) {
                 for error in errors {
-                    eprintln!("Something went wrong during code generation.\n{}", error);
+                    let error_chain = print_error_chain(&error);
+                    println!(
+                        "\nSomething went wrong during code generation.\n{}",
+                        textwrap::indent(&error_chain, "    ")
+                    );
                 }
                 exit(1);
             }
@@ -58,4 +62,13 @@ fn main() {
     };
 
     exit(status.code().unwrap_or(1));
+}
+
+fn print_error_chain(error: &anyhow::Error) -> String {
+    let mut msg = String::new();
+    writeln!(&mut msg, "{}", error).unwrap();
+    for cause in error.chain().skip(1) {
+        writeln!(&mut msg, "Caused by: {}", cause).unwrap();
+    }
+    msg
 }
