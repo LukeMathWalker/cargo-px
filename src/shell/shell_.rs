@@ -1,9 +1,9 @@
-use std::fmt;
-use std::io::{IsTerminal, Write};
-use anstream::AutoStream;
-use anstyle::Style;
 use crate::shell::hostname::hostname;
 use crate::shell::shell_::style::{ERROR, HEADER, NOTE, WARN};
+use anstream::AutoStream;
+use anstyle::Style;
+use std::fmt;
+use std::io::{IsTerminal, Write};
 
 pub enum TtyWidth {
     NoTty,
@@ -48,7 +48,7 @@ pub struct Shell {
     /// Flag that indicates the current line needs to be cleared before
     /// printing. Used when a progress bar is currently displayed.
     needs_clear: bool,
-    hostname: Option<String>
+    hostname: Option<String>,
 }
 
 impl fmt::Debug for Shell {
@@ -198,16 +198,16 @@ impl Shell {
 
     /// Shortcut to right-align and color green a status message.
     pub fn status<T, U>(&mut self, status: T, message: U) -> anyhow::Result<()>
-        where
-            T: fmt::Display,
-            U: fmt::Display,
+    where
+        T: fmt::Display,
+        U: fmt::Display,
     {
         self.print(&status, Some(&message), &HEADER, true)
     }
 
     pub fn status_header<T>(&mut self, status: T) -> anyhow::Result<()>
-        where
-            T: fmt::Display,
+    where
+        T: fmt::Display,
     {
         self.print(&status, None, &NOTE, true)
     }
@@ -219,17 +219,17 @@ impl Shell {
         message: U,
         color: &Style,
     ) -> anyhow::Result<()>
-        where
-            T: fmt::Display,
-            U: fmt::Display,
+    where
+        T: fmt::Display,
+        U: fmt::Display,
     {
         self.print(&status, Some(&message), color, true)
     }
 
     /// Runs the callback only if we are in verbose mode.
     pub fn verbose<F>(&mut self, mut callback: F) -> anyhow::Result<()>
-        where
-            F: FnMut(&mut Shell) -> anyhow::Result<()>,
+    where
+        F: FnMut(&mut Shell) -> anyhow::Result<()>,
     {
         match self.verbosity {
             Verbosity::Verbose => callback(self),
@@ -239,8 +239,8 @@ impl Shell {
 
     /// Runs the callback if we are not in verbose mode.
     pub fn concise<F>(&mut self, mut callback: F) -> anyhow::Result<()>
-        where
-            F: FnMut(&mut Shell) -> anyhow::Result<()>,
+    where
+        F: FnMut(&mut Shell) -> anyhow::Result<()>,
     {
         match self.verbosity {
             Verbosity::Verbose => Ok(()),

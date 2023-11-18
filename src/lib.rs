@@ -82,7 +82,7 @@ fn generate_crate(
     // Invoke generator
     {
         let timer = Instant::now();
-        let _ = shell.status("Generating", format!("`{}`", unit.generator_name,));
+        let _ = shell.status("Generating", format!("`{}`", unit.package_metadata.name()));
         let mut cmd = unit.run_command(cargo_path);
         cmd.env("CARGO_PX_WORKSPACE_ROOT_DIR", workspace_path)
             .stdout(std::process::Stdio::inherit())
@@ -104,7 +104,7 @@ fn generate_crate(
             "Generated",
             format!(
                 "`{}` in {:.3}s",
-                unit.generator_name,
+                unit.package_metadata.name(),
                 timer.elapsed().as_secs_f32()
             ),
         );

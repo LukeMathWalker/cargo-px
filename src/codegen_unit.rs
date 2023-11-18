@@ -86,10 +86,7 @@ impl<'graph> CodegenUnit<'graph> {
     /// codegen unit.
     pub fn build_command(&self, cargo_path: &str) -> std::process::Command {
         let mut cmd = std::process::Command::new(cargo_path);
-        cmd.arg("build")
-            .arg("--bin")
-            .arg(&self.generator_name)
-            .arg("--quiet");
+        cmd.arg("build").arg("--bin").arg(&self.generator_name);
         cmd
     }
 }
