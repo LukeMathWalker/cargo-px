@@ -94,8 +94,12 @@ pub(crate) fn extract_codegen_units(
         let raw_metadata = p_metadata.metadata_table().to_owned();
         match serde_json::from_value::<Option<ManifestMetadata>>(raw_metadata) {
             Ok(metadata) => {
-                let Some(metadata) = metadata else { continue; };
-                let Some(px_config) = metadata.px else { continue; };
+                let Some(metadata) = metadata else {
+                    continue;
+                };
+                let Some(px_config) = metadata.px else {
+                    continue;
+                };
                 match CodegenUnit::new(px_config, p_metadata, pkg_graph) {
                     Ok(codegen_unit) => codegen_units.push(codegen_unit),
                     Err(e) => errors.push(e),
@@ -103,7 +107,7 @@ pub(crate) fn extract_codegen_units(
             }
             Err(e) => {
                 let e = anyhow::anyhow!(e).context(format!(
-                    "Failed to deserialize `px`'s configuration for package `{}`",
+                    "Failed to deserialize `cargo px`'s configuration from the manifest of `{}`",
                     p_metadata.name(),
                 ));
                 errors.push(e)
