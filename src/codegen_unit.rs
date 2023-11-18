@@ -67,9 +67,9 @@ impl<'graph> CodegenUnit<'graph> {
         }
     }
 
-    /// Build a `std::process::Command` that can be used to invoke the code generator for this
+    /// Build a `std::process::Command` that invokes the code generator for this
     /// codegen unit.
-    pub fn command(&self, cargo_path: &str) -> std::process::Command {
+    pub fn run_command(&self, cargo_path: &str) -> std::process::Command {
         let mut cmd = std::process::Command::new(cargo_path);
         cmd.arg("run")
             .arg("--bin")
@@ -79,6 +79,14 @@ impl<'graph> CodegenUnit<'graph> {
                 "CARGO_PX_GENERATED_PKG_MANIFEST_PATH",
                 self.package_metadata.manifest_path(),
             );
+        cmd
+    }
+
+    /// Build a `std::process::Command` that builds the code generator for this
+    /// codegen unit.
+    pub fn build_command(&self, cargo_path: &str) -> std::process::Command {
+        let mut cmd = std::process::Command::new(cargo_path);
+        cmd.arg("build").arg("--bin").arg(&self.generator_name);
         cmd
     }
 }
@@ -94,8 +102,12 @@ pub(crate) fn extract_codegen_units(
         let raw_metadata = p_metadata.metadata_table().to_owned();
         match serde_json::from_value::<Option<ManifestMetadata>>(raw_metadata) {
             Ok(metadata) => {
-                let Some(metadata) = metadata else { continue; };
-                let Some(px_config) = metadata.px else { continue; };
+                let Some(metadata) = metadata else {
+                    continue;
+                };
+                let Some(px_config) = metadata.px else {
+                    continue;
+                };
                 match CodegenUnit::new(px_config, p_metadata, pkg_graph) {
                     Ok(codegen_unit) => codegen_units.push(codegen_unit),
                     Err(e) => errors.push(e),
@@ -103,7 +115,7 @@ pub(crate) fn extract_codegen_units(
             }
             Err(e) => {
                 let e = anyhow::anyhow!(e).context(format!(
-                    "Failed to deserialize `px`'s configuration for package `{}`",
+                    "Failed to deserialize `cargo px`'s configuration from the manifest of `{}`",
                     p_metadata.name(),
                 ));
                 errors.push(e)
