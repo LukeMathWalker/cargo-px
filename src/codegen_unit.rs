@@ -67,9 +67,9 @@ impl<'graph> CodegenUnit<'graph> {
         }
     }
 
-    /// Build a `std::process::Command` that can be used to invoke the code generator for this
+    /// Build a `std::process::Command` that invokes the code generator for this
     /// codegen unit.
-    pub fn command(&self, cargo_path: &str) -> std::process::Command {
+    pub fn run_command(&self, cargo_path: &str) -> std::process::Command {
         let mut cmd = std::process::Command::new(cargo_path);
         cmd.arg("run")
             .arg("--bin")
@@ -79,6 +79,17 @@ impl<'graph> CodegenUnit<'graph> {
                 "CARGO_PX_GENERATED_PKG_MANIFEST_PATH",
                 self.package_metadata.manifest_path(),
             );
+        cmd
+    }
+
+    /// Build a `std::process::Command` that builds the code generator for this
+    /// codegen unit.
+    pub fn build_command(&self, cargo_path: &str) -> std::process::Command {
+        let mut cmd = std::process::Command::new(cargo_path);
+        cmd.arg("build")
+            .arg("--bin")
+            .arg(&self.generator_name)
+            .arg("--quiet");
         cmd
     }
 }

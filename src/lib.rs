@@ -20,9 +20,14 @@ pub fn codegen(cargo_path: &str, shell: &mut Shell) -> Result<(), Vec<anyhow::Er
     let codegen_units = extract_codegen_units(&package_graph)?;
     let codegen_plan = codegen_plan::codegen_plan(codegen_units, &package_graph)?;
 
-    let workspace_dir = package_graph.workspace().root().canonicalize().unwrap();
+    let workspace_dir = package_graph
+        .workspace()
+        .root()
+        .canonicalize()
+        .context("Failed to get the canonical path to the root directory of this workspace")
+        .map_err(|e| vec![e])?;
     for unit in codegen_plan {
-        generate_crate(&unit, cargo_path, &workspace_dir).map_err(|e| vec![e])?;
+        generate_crate(&unit, cargo_path, &workspace_dir, shell).map_err(|e| vec![e])?;
     }
 
     Ok(())
@@ -33,22 +38,76 @@ fn generate_crate(
     unit: &codegen_unit::CodegenUnit,
     cargo_path: &str,
     workspace_path: &Path,
+    shell: &mut Shell,
 ) -> Result<(), anyhow::Error> {
-    let mut cmd = unit.command(cargo_path);
-    cmd.env("CARGO_PX_WORKSPACE_ROOT_DIR", workspace_path)
-        .stdout(std::process::Stdio::inherit())
-        .stderr(std::process::Stdio::inherit());
+    // Compile generator
+    {
+        let timer = Instant::now();
+        let _ = shell.status(
+            "Compiling",
+            format!(
+                "`{}`, the code generator for `{}`",
+                unit.generator_name,
+                unit.package_metadata.name()
+            ),
+        );
+        let mut cmd = unit.build_command(cargo_path);
+        cmd.env("CARGO_PX_WORKSPACE_ROOT_DIR", workspace_path)
+            .stdout(std::process::Stdio::inherit())
+            .stderr(std::process::Stdio::inherit());
 
-    let err_msg = || {
-        format!(
-        "Failed to execute code generator for package `{}`.\nCheck the output above to diagnose what went wrong.",
-        unit.package_metadata.name()
-    )
-    };
+        let err_msg = || {
+            format!(
+                "Failed to compile `{}`, the code generator for `{}`",
+                unit.generator_name,
+                unit.package_metadata.name()
+            )
+        };
 
-    let status = cmd.status().with_context(err_msg)?;
-    if !status.success() {
-        anyhow::bail!(err_msg());
+        let status = cmd.status().with_context(err_msg)?;
+        if !status.success() {
+            anyhow::bail!(err_msg());
+        }
+        let _ = shell.status(
+            "Compiled",
+            format!(
+                "`{}`, the code generator for `{}`, in {:.3}s",
+                unit.generator_name,
+                unit.package_metadata.name(),
+                timer.elapsed().as_secs_f32()
+            ),
+        );
+    }
+
+    // Invoke generator
+    {
+        let timer = Instant::now();
+        let _ = shell.status("Generating", format!("`{}`", unit.generator_name,));
+        let mut cmd = unit.run_command(cargo_path);
+        cmd.env("CARGO_PX_WORKSPACE_ROOT_DIR", workspace_path)
+            .stdout(std::process::Stdio::inherit())
+            .stderr(std::process::Stdio::inherit());
+
+        let err_msg = || {
+            format!(
+                "Failed to run `{}`, the code generator for package `{}`",
+                unit.generator_name,
+                unit.package_metadata.name()
+            )
+        };
+
+        let status = cmd.status().with_context(err_msg)?;
+        if !status.success() {
+            anyhow::bail!(err_msg());
+        }
+        let _ = shell.status(
+            "Generated",
+            format!(
+                "`{}` in {:.3}s",
+                unit.generator_name,
+                timer.elapsed().as_secs_f32()
+            ),
+        );
     }
     Ok(())
 }

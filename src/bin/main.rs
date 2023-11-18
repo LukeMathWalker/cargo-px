@@ -44,6 +44,7 @@ fn main() {
     // of the sub-command, i.e. `px` in our case.
     let forwarded_args: Vec<_> = std::env::args().skip(2).collect();
 
+    let mut has_codegened = false;
     if let Some(cargo_command) = forwarded_args.first() {
         // If the user is invoking a command whose outcome might be affected by code generation,
         // we need to perform code generation first.
@@ -56,9 +57,15 @@ fn main() {
                 for error in errors {
                     let _ = display_error(&error, &mut shell);
                 }
-                let _ = shell.error("Something went wrong during code generation");
                 exit(1);
             }
+            has_codegened = true;
+        }
+    }
+
+    if has_codegened {
+        if let Some(cargo_command) = forwarded_args.first() {
+            let _ = shell.status("Invoking", format!("`cargo {cargo_command}`"));
         }
     }
 
