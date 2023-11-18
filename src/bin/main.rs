@@ -10,7 +10,7 @@ static TRACING_ENV_VAR: &str = "CARGO_PX_LOG";
 fn init_tracing() -> Result<(), anyhow::Error> {
     // We don't want to show `tracing` data to users as they go about their business, so we
     // require them to explicitly opt-in to it.
-    if !std::env::var(TRACING_ENV_VAR).is_ok() {
+    if std::env::var(TRACING_ENV_VAR).is_err() {
         return Ok(());
     }
     let env_filter = EnvFilter::builder()

@@ -371,13 +371,11 @@ impl Shell {
         let hostname = if cfg!(windows) {
             // Not supported correctly on windows
             None
+        } else if let Some(hostname) = self.hostname.as_deref() {
+            Some(hostname)
         } else {
-            if let Some(hostname) = self.hostname.as_deref() {
-                Some(hostname)
-            } else {
-                self.hostname = hostname().ok().and_then(|h| h.into_string().ok());
-                self.hostname.as_deref()
-            }
+            self.hostname = hostname().ok().and_then(|h| h.into_string().ok());
+            self.hostname.as_deref()
         };
         let _ = url.set_host(hostname);
         Some(url)
@@ -530,7 +528,7 @@ mod imp {
             let mut winsize: libc::winsize = mem::zeroed();
             // The .into() here is needed for FreeBSD which defines TIOCGWINSZ
             // as c_uint but ioctl wants c_ulong.
-            if libc::ioctl(libc::STDERR_FILENO, libc::TIOCGWINSZ.into(), &mut winsize) < 0 {
+            if libc::ioctl(libc::STDERR_FILENO, libc::TIOCGWINSZ, &mut winsize) < 0 {
                 return TtyWidth::NoTty;
             }
             if winsize.ws_col > 0 {
