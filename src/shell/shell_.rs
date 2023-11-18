@@ -11,24 +11,6 @@ pub enum TtyWidth {
     Guess(usize),
 }
 
-impl TtyWidth {
-    /// Returns the width of the terminal to use for diagnostics.
-    pub fn diagnostic_terminal_width(&self) -> Option<usize> {
-        match *self {
-            TtyWidth::NoTty | TtyWidth::Guess(_) => None,
-            TtyWidth::Known(width) => Some(width),
-        }
-    }
-
-    /// Returns the width used by progress bars for the tty.
-    pub fn progress_max_width(&self) -> Option<usize> {
-        match *self {
-            TtyWidth::NoTty => None,
-            TtyWidth::Known(width) | TtyWidth::Guess(width) => Some(width),
-        }
-    }
-}
-
 /// The requested verbosity of output.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Verbosity {
@@ -643,15 +625,8 @@ fn default_err_erase_line(shell: &mut Shell) {
 mod style {
     use anstyle::{AnsiColor, Effects, Style};
 
-    pub const NOP: Style = Style::new();
     pub const HEADER: Style = AnsiColor::Green.on_default().effects(Effects::BOLD);
-    pub const USAGE: Style = AnsiColor::Green.on_default().effects(Effects::BOLD);
-    pub const LITERAL: Style = AnsiColor::Cyan.on_default().effects(Effects::BOLD);
-    pub const PLACEHOLDER: Style = AnsiColor::Cyan.on_default();
     pub const ERROR: Style = AnsiColor::Red.on_default().effects(Effects::BOLD);
     pub const WARN: Style = AnsiColor::Yellow.on_default().effects(Effects::BOLD);
     pub const NOTE: Style = AnsiColor::Cyan.on_default().effects(Effects::BOLD);
-    pub const GOOD: Style = AnsiColor::Green.on_default().effects(Effects::BOLD);
-    pub const VALID: Style = AnsiColor::Cyan.on_default().effects(Effects::BOLD);
-    pub const INVALID: Style = AnsiColor::Yellow.on_default().effects(Effects::BOLD);
 }
