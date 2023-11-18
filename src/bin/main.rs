@@ -52,7 +52,7 @@ fn main() {
         ]
         .contains(&cargo_command.as_str())
         {
-            if let Err(errors) = cargo_px::codegen(&cargo_path) {
+            if let Err(errors) = cargo_px::codegen(&cargo_path, &mut shell) {
                 for error in errors {
                     let _ = display_error(&error, &mut shell);
                 }

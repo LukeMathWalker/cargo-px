@@ -1,4 +1,5 @@
 use std::path::Path;
+use std::time::Instant;
 
 use anyhow::Context;
 use guppy::graph::PackageGraph;
@@ -14,8 +15,8 @@ pub use shell::Shell;
 /// Find all codegen units in the current workspace and perform code generation for each of them,
 /// in a order that takes into account their respective dependency relationships.
 #[tracing::instrument(level = tracing::Level::DEBUG, name = "Generate crates", skip(cargo_path))]
-pub fn codegen(cargo_path: &str) -> Result<(), Vec<anyhow::Error>> {
-    let package_graph = package_graph(cargo_path).map_err(|e| vec![e])?;
+pub fn codegen(cargo_path: &str, shell: &mut Shell) -> Result<(), Vec<anyhow::Error>> {
+    let package_graph = package_graph(cargo_path, shell).map_err(|e| vec![e])?;
     let codegen_units = extract_codegen_units(&package_graph)?;
     let codegen_plan = codegen_plan::codegen_plan(codegen_units, &package_graph)?;
 
@@ -53,13 +54,20 @@ fn generate_crate(
 }
 
 /// Build the package graph for the current workspace.
-#[tracing::instrument(name = "Compute package graph", skip(cargo_path))]
-fn package_graph(cargo_path: &str) -> Result<PackageGraph, anyhow::Error> {
+#[tracing::instrument(name = "Compute package graph", skip_all)]
+fn package_graph(cargo_path: &str, shell: &mut Shell) -> Result<PackageGraph, anyhow::Error> {
+    let timer = Instant::now();
+    let _ = shell.status("Computing", "package graph");
     let mut metadata_cmd = guppy::MetadataCommand::new();
     metadata_cmd.cargo_path(cargo_path);
-    metadata_cmd
+    let package_graph = metadata_cmd
         .exec()
         .context("Failed to execute `cargo metadata`")?
         .build_graph()
-        .context("Failed to build a package graph starting from the output of `cargo metadata`")
+        .context("Failed to build a package graph starting from the output of `cargo metadata`");
+    let _ = shell.status(
+        "Computed",
+        format!("package graph in {:.3}s", timer.elapsed().as_secs_f32()),
+    );
+    package_graph
 }
