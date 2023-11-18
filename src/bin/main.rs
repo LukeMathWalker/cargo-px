@@ -1,12 +1,21 @@
-use std::fmt::Write;
+use anyhow::Context;
+use cargo_px::Shell;
 use std::process::{exit, Command};
-use tracing::metadata::LevelFilter;
 use tracing_subscriber::{fmt::format::FmtSpan, EnvFilter};
 
-fn init_tracing() {
+/// The name of the environment variable that can be used to enable (and configure) `tracing`
+/// output for `cargo px`.
+static TRACING_ENV_VAR: &str = "CARGO_PX_LOG";
+
+fn init_tracing() -> Result<(), anyhow::Error> {
+    // We don't want to show `tracing` data to users as they go about their business, so we
+    // require them to explicitly opt-in to it.
+    if !std::env::var(TRACING_ENV_VAR).is_ok() {
+        return Ok(());
+    }
     let env_filter = EnvFilter::builder()
-        .with_default_directive(LevelFilter::INFO.into())
-        .from_env_lossy();
+        .with_env_var(TRACING_ENV_VAR)
+        .from_env()?;
     let timer = tracing_subscriber::fmt::time::uptime();
     let subscriber = tracing_subscriber::fmt()
         .with_env_filter(env_filter)
@@ -15,10 +24,15 @@ fn init_tracing() {
         .with_span_events(FmtSpan::NEW | FmtSpan::CLOSE)
         .compact();
     subscriber.init();
+    Ok(())
 }
 
 fn main() {
-    init_tracing();
+    let mut shell = Shell::new();
+    if let Err(e) = init_tracing().context("Failed to initialize `tracing`'s subscriber") {
+        let _ = display_error(&e, &mut shell);
+        exit(1)
+    }
 
     let cargo_path = std::env::var("CARGO").expect(
         "The `CARGO` environment variable was not set. \
@@ -40,12 +54,9 @@ fn main() {
         {
             if let Err(errors) = cargo_px::codegen(&cargo_path) {
                 for error in errors {
-                    let error_chain = print_error_chain(&error);
-                    println!(
-                        "\nSomething went wrong during code generation.\n{}",
-                        textwrap::indent(&error_chain, "    ")
-                    );
+                    let _ = display_error(&error, &mut shell);
                 }
+                let _ = shell.error("Something went wrong during code generation");
                 exit(1);
             }
         }
@@ -53,10 +64,10 @@ fn main() {
 
     let mut cmd = Command::new(cargo_path);
     cmd.args(forwarded_args);
-    let status = match cmd.status() {
+    let status = match cmd.status().context("Failed to execute `cargo` command") {
         Ok(status) => status,
         Err(e) => {
-            eprintln!("Error executing command: {:?}", e);
+            let _ = display_error(&e, &mut shell);
             exit(1);
         }
     };
@@ -64,11 +75,15 @@ fn main() {
     exit(status.code().unwrap_or(1));
 }
 
-fn print_error_chain(error: &anyhow::Error) -> String {
-    let mut msg = String::new();
-    writeln!(&mut msg, "{}", error).unwrap();
+fn display_error(error: &anyhow::Error, shell: &mut Shell) -> Result<(), anyhow::Error> {
+    shell.error(error)?;
     for cause in error.chain().skip(1) {
-        writeln!(&mut msg, "Caused by: {}", cause).unwrap();
+        writeln!(shell.err(), "\n  Caused by:")?;
+        write!(
+            shell.err(),
+            "{}",
+            textwrap::indent(&cause.to_string(), "    ")
+        )?;
     }
-    msg
+    Ok(())
 }

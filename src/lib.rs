@@ -7,6 +7,9 @@ use crate::codegen_unit::extract_codegen_units;
 mod codegen_plan;
 mod codegen_unit;
 mod config;
+mod shell;
+
+pub use shell::Shell;
 
 /// Find all codegen units in the current workspace and perform code generation for each of them,
 /// in a order that takes into account their respective dependency relationships.
