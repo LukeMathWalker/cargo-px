@@ -31,3 +31,13 @@ anstyle = "1.0.4"
 url = "2.4.1"
 supports-hyperlinks = "2.1.0"
 libc = "0.2.149"
+
+[target.'cfg(windows)'.dependencies.windows-sys]
+version = "0.52"
+features = [
+    "Win32_Foundation",
+    "Win32_Security",
+    "Win32_Storage_FileSystem",
+    "Win32_System_IO",
+    "Win32_System_Console",
+]
