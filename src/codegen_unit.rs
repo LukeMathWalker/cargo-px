@@ -1,6 +1,7 @@
 //! Logic to retrieve and validate codegen units defined in the current workspace.
 
 use crate::config::{GenerateConfig, ManifestMetadata, PxConfig};
+use anyhow::Context;
 use guppy::{
     graph::{BuildTargetKind, PackageGraph, PackageMetadata},
     PackageId,
@@ -19,6 +20,9 @@ pub(crate) struct CodegenUnit<'graph> {
     /// The package ID of the package that defines the binary to be invoked
     /// in order to perform code generation.
     pub(crate) generator_package_id: &'graph PackageId,
+    /// The metadata of the package that defines the binary to be invoked
+    /// in order to perform code generation.
+    pub(crate) generator_package_metadata: PackageMetadata<'graph>,
 }
 
 impl<'graph> CodegenUnit<'graph> {
@@ -50,12 +54,23 @@ impl<'graph> CodegenUnit<'graph> {
         }
 
         match generator_package_id {
-            Some(generator_package_id) => Ok(CodegenUnit {
-                package_metadata: pkg_metadata,
-                generator_name: px_config.generator_name,
-                generator_args: px_config.generator_args,
-                generator_package_id,
-            }),
+            Some(generator_package_id) => {
+                let generator_package_metadata =
+                    pkg_graph.metadata(generator_package_id).with_context(|| {
+                        format!(
+                            "Failed to retrieve the metadata of the package that defines `{}`, \
+                            the code generator binary",
+                            px_config.generator_name
+                        )
+                    })?;
+                Ok(CodegenUnit {
+                    package_metadata: pkg_metadata,
+                    generator_name: px_config.generator_name,
+                    generator_args: px_config.generator_args,
+                    generator_package_id,
+                    generator_package_metadata,
+                })
+            }
             None => {
                 let error = anyhow::anyhow!(
                     "There is no binary named `{}` in the workspace, but it's listed as the generator name for package `{}`",
@@ -72,6 +87,8 @@ impl<'graph> CodegenUnit<'graph> {
     pub fn run_command(&self, cargo_path: &str) -> std::process::Command {
         let mut cmd = std::process::Command::new(cargo_path);
         cmd.arg("run")
+            .arg("--package")
+            .arg(self.generator_package_metadata.name())
             .arg("--bin")
             .arg(&self.generator_name)
             .args(&self.generator_args)
@@ -86,7 +103,11 @@ impl<'graph> CodegenUnit<'graph> {
     /// codegen unit.
     pub fn build_command(&self, cargo_path: &str) -> std::process::Command {
         let mut cmd = std::process::Command::new(cargo_path);
-        cmd.arg("build").arg("--bin").arg(&self.generator_name);
+        cmd.arg("build")
+            .arg("--package")
+            .arg(self.generator_package_metadata.name())
+            .arg("--bin")
+            .arg(&self.generator_name);
         cmd
     }
 }
