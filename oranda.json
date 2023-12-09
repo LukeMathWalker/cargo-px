@@ -1,0 +1,12 @@
+{
+  "build": {
+    "path_prefix": "cargo-px"
+  },
+  "marketing": {
+    "analytics": {
+      "plausible": {
+        "domain": "lukemathwalker.github.io"
+      }
+    }
+  }
+}
