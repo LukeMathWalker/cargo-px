@@ -1,3 +1,4 @@
+<div class="oranda-hide">
 <h1 align="center">cargo-px</h1>
 <div align="center">
  <strong>
@@ -20,30 +21,25 @@
   </a>
 </div>
 <br/>
+</div>
 
 Check out the [announcement post](https://lpalmieri.com/posts/cargo-px) to learn more about `cargo-px` and the problems it solves with respect to code generation in Rust projects.
+
+
+<div class="oranda-hide">
 
 # Table of Contents
 0. [How to install](#how-to-install)
 1. [How to use](#how-to-use)
 2. [Verify that the generated code is up-to-date](#verify-that-the-generated-code-is-up-to-date)
 3. [License](#license)
+4. [Known issues](#known-issues)
 
 ## How To Install 
 
-You can install `cargo-px` from [crates.io](https://crates.io) with
+Check out the instructions in the [release page](https://lukemathwalker.github.io/cargo-px/)
 
-```bash
-cargo install cargo-px --locked
-```
-
-### MacOS
-
-If you're using a macOS machine, you probably want to [disable gatekeeper notarisation for your terminal](https://apple.stackexchange.com/questions/403184/disable-gatekeeper-notarisation-check-without-disabling-sip/403185#403185).  
-
-Every time you execute a binary for the first time, Apple [executes a request over the network to their servers](https://sigpipe.macromates.com/2020/macos-catalina-slow-by-design/). This becomes an issue for `cargo-px`, since it must compile your generator and then execute it: the generator binary is "new", therefore it incurs the penalty of this notarisation check.  
-The magnitude of the delay depends on the quality of your connection as well as on Apple's servers performance. On a good Internet connection, I consistenly observed 100/150ms delays, but delays in the order of seconds have been reported as well.  
-Fun aside: if you're working without an Internet connection, Apple skips the check entirely and lets you execute unverified binaries without any complaint.
+</div>
 
 ## How to use
 
@@ -94,6 +90,17 @@ cargo px check
 # modified any of the files tracked by `git` in version control
 git diff --quiet HEAD || (echo "The code-generated crates are stale. Re-run 'cargo px check locally and commit the results" && exit 1)
 ```
+
+## Known issues
+
+### MacOS
+
+If you're using a macOS machine, you probably want to [disable gatekeeper notarisation for your terminal](https://apple.stackexchange.com/questions/403184/disable-gatekeeper-notarisation-check-without-disabling-sip/403185#403185).
+
+Every time you execute a binary for the first time, Apple [executes a request over the network to their servers](https://sigpipe.macromates.com/2020/macos-catalina-slow-by-design/). This becomes an issue for `cargo-px`, since it must compile your generator and then execute it: the generator binary is "new", therefore it incurs the penalty of this notarisation check.  
+The magnitude of the delay depends on the quality of your connection as well as on Apple's servers performance. On a good Internet connection, I consistenly observed 100/150ms delays, but delays in the order of seconds have been reported as well.  
+Fun aside: if you're working without an Internet connection, Apple skips the check entirely and lets you execute unverified binaries without any complaint.
+
 
 ## License
 
