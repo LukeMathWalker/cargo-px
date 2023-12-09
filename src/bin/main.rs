@@ -1,5 +1,5 @@
 use anyhow::Context;
-use cargo_px::Shell;
+use cargo_px::{Shell, Verbosity};
 use std::process::{exit, Command};
 use tracing_subscriber::{fmt::format::FmtSpan, EnvFilter};
 
@@ -38,11 +38,21 @@ fn main() {
         "The `CARGO` environment variable was not set. \
         This is unexpected: it should always be provided by `cargo` when \
         invoking a custom sub-command, allowing `cargo-px` to correctly detect \
-        which toolchain should be used. Please file a bug.",
+        which toolchain should be used. \n\
+        Make sure that you are invoking `cargo-px` as a `cargo` sub-command: `cargo px [...]` rather \
+        than `cargo-px [...]` (notice the missing dash in the first one!). \n
+        If you're invoking it as expected but it's showing this error message, please file a bug.",
     );
     // The first arg is always `cargo` and the second arg is always the name
     // of the sub-command, i.e. `px` in our case.
     let forwarded_args: Vec<_> = std::env::args().skip(2).collect();
+
+    let be_quiet = forwarded_args
+        .iter()
+        .any(|arg| arg == "--quiet" || arg == "-q");
+    if be_quiet {
+        shell.set_verbosity(Verbosity::Quiet);
+    }
 
     let mut has_codegened = false;
     if let Some(cargo_command) = forwarded_args.first() {
