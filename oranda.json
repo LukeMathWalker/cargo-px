@@ -8,5 +8,14 @@
         "domain": "lukemathwalker.github.io"
       }
     }
+  },
+  "components": {
+    "artifacts": {
+      "package_managers": {
+        "preferred": {
+          "cargo": "cargo install --locked cargo-px"
+        }
+      }
+    }
   }
 }
