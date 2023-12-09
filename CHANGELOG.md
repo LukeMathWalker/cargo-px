@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.13](https://github.com/LukeMathWalker/cargo-px/compare/cargo-px-v0.1.12...cargo-px-v0.1.13) - 2023-12-09
+
+### Other
+- fix style assets for website
+
 ## [0.1.12](https://github.com/LukeMathWalker/cargo-px/compare/cargo-px-v0.1.11...cargo-px-v0.1.12) - 2023-12-09
 
 ### Other
