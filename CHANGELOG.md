@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.9](https://github.com/LukeMathWalker/cargo-px/compare/cargo-px-v0.1.8...cargo-px-v0.1.9) - 2023-12-09
+
+### Added
+- Pass along the `--quiet` flag to `cargo` invocations if `--quiet` had been specified in `cargo-px`'s invocation ([#20](https://github.com/LukeMathWalker/cargo-px/pull/20))
+
 ## [0.1.8](https://github.com/LukeMathWalker/cargo-px/compare/cargo-px-v0.1.7...cargo-px-v0.1.8) - 2023-12-03
 
 ### Fixed
