@@ -10,7 +10,7 @@ mod codegen_unit;
 mod config;
 mod shell;
 
-pub use shell::Shell;
+pub use shell::{Shell, Verbosity};
 
 /// Find all codegen units in the current workspace and perform code generation for each of them,
 /// in a order that takes into account their respective dependency relationships.
@@ -40,6 +40,8 @@ fn generate_crate(
     workspace_path: &Path,
     shell: &mut Shell,
 ) -> Result<(), anyhow::Error> {
+    let be_quiet = shell.verbosity() == Verbosity::Quiet;
+
     // Compile generator
     {
         let timer = Instant::now();
@@ -51,7 +53,7 @@ fn generate_crate(
                 unit.package_metadata.name()
             ),
         );
-        let mut cmd = unit.build_command(cargo_path);
+        let mut cmd = unit.build_command(cargo_path, be_quiet);
         cmd.env("CARGO_PX_WORKSPACE_ROOT_DIR", workspace_path)
             .stdout(std::process::Stdio::inherit())
             .stderr(std::process::Stdio::inherit());
@@ -83,7 +85,7 @@ fn generate_crate(
     {
         let timer = Instant::now();
         let _ = shell.status("Generating", format!("`{}`", unit.package_metadata.name()));
-        let mut cmd = unit.run_command(cargo_path);
+        let mut cmd = unit.run_command(cargo_path, be_quiet);
         cmd.env("CARGO_PX_WORKSPACE_ROOT_DIR", workspace_path)
             .stdout(std::process::Stdio::inherit())
             .stderr(std::process::Stdio::inherit());
