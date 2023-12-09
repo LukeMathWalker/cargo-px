@@ -38,7 +38,10 @@ fn main() {
         "The `CARGO` environment variable was not set. \
         This is unexpected: it should always be provided by `cargo` when \
         invoking a custom sub-command, allowing `cargo-px` to correctly detect \
-        which toolchain should be used. Please file a bug.",
+        which toolchain should be used. \n\
+        Make sure that you are invoking `cargo-px` as a `cargo` sub-command: `cargo px [...]` rather \
+        than `cargo-px [...]` (notice the missing dash in the first one!). \n
+        If you're invoking it as expected but it's showing this error message, please file a bug.",
     );
     // The first arg is always `cargo` and the second arg is always the name
     // of the sub-command, i.e. `px` in our case.
