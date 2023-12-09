@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.10](https://github.com/LukeMathWalker/cargo-px/compare/cargo-px-v0.1.9...cargo-px-v0.1.10) - 2023-12-09
+
+### Other
+- Fix trigger for cargo-dist. ([#25](https://github.com/LukeMathWalker/cargo-px/pull/25))
+
 ## [0.1.9](https://github.com/LukeMathWalker/cargo-px/compare/cargo-px-v0.1.8...cargo-px-v0.1.9) - 2023-12-09
 
 ### Added
