@@ -47,7 +47,9 @@ fn main() {
     // of the sub-command, i.e. `px` in our case.
     let forwarded_args: Vec<_> = std::env::args().skip(2).collect();
 
-    let be_quiet = forwarded_args.iter().any(|arg| arg == "--quiet" || arg == "-q");
+    let be_quiet = forwarded_args
+        .iter()
+        .any(|arg| arg == "--quiet" || arg == "-q");
     if be_quiet {
         shell.set_verbosity(Verbosity::Quiet);
     }
