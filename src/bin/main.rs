@@ -56,6 +56,18 @@ fn main() {
 
     let mut has_codegened = false;
     if let Some(cargo_command) = forwarded_args.first() {
+        // This is not a proxy for a `cargo` command, it is a `cargo-px` command.
+        if "verify-freshness" == cargo_command.as_str() {
+            if let Err(errors) = cargo_px::verify(&cargo_path, &mut shell) {
+                for error in errors {
+                    let _ = display_error(&error, &mut shell);
+                }
+                exit(1);
+            }
+
+            exit(0);
+        }
+
         // If the user is invoking a command whose outcome might be affected by code generation,
         // we need to perform code generation first.
         if [

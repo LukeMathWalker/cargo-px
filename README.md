@@ -81,15 +81,38 @@ You can use the [`cargo_px_env`](https://crates.io/crates/cargo_px_env) crate to
 ## Verify that the generated code is up-to-date
 
 If you are committing the generated code, it might be desirable to verify in CI that it's up-to-date.  
-You can do so by running:
+You can do so by invoking `cargo px verify-freshness`.  
+It will only work if you define a verifier for every code-generated project in your workspace:
 
-```bash
-# Triggers code-generation and verifies that the code compiles
-cargo px check
-# Returns an error if the code generation step created new files or 
-# modified any of the files tracked by `git` in version control
-git diff --quiet HEAD || (echo "The code-generated crates are stale. Re-run 'cargo px check locally and commit the results" && exit 1)
+```toml
+[package]
+name = "..."
+version = "..."
+# [...]
+
+[package.metadata.px.verify]
+# The verifier is a binary in the current workspace. 
+# It's the only verifier type we support at the moment.
+verifier_type = "cargo_workspace_binary"
+# The name of the binary.
+verifier_name = "bp"
+# The arguments to be passed to the binary. 
+# It can be omitted if there are no arguments.
+verifier_args = ["--verify"]
 ```
+
+`cargo-px` will detect the configuration and invoke `cargo run --bin bp -- --verify"` for you.  
+The generated package is considered up-to-date if the verifier invocation returns a `0` status code.
+
+If there are multiple crates that need to be verified, `cargo-px` will invoke the respective verifier 
+in an order that takes into account the dependency graph (i.e. dependencies are always code-generated before their dependents).
+
+`cargo-px` will also set two environment variables for the verifier:
+
+- `CARGO_PX_GENERATED_PKG_MANIFEST_PATH`, the path to the `Cargo.toml` file of the generated crate;
+- `CARGO_PX_WORKSPACE_ROOT_DIR`, the path to the `Cargo.toml` file that defines the current workspace (i.e. the one that contains the `[workspace]` section).
+
+You can use the [`cargo_px_env`](https://crates.io/crates/cargo_px_env) crate to retrieve and work with these environment variables.
 
 ## Known issues
 
