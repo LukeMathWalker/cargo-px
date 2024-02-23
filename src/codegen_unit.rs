@@ -60,11 +60,7 @@ impl<'graph> WorkspaceBinary<'graph> {
             .arg("--package")
             .arg(self.package_metadata.name())
             .arg("--bin")
-            .arg(&self.name)
-            .env(
-                "CARGO_PX_GENERATED_PKG_MANIFEST_PATH",
-                self.package_metadata.manifest_path(),
-            );
+            .arg(&self.name);
         if be_quiet {
             cmd.arg("--quiet");
         }

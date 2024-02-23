@@ -121,9 +121,14 @@ fn verify_crate(
         let timer = Instant::now();
         let _ = shell.status("Verifying", format!("`{}`", package_metadata.name()));
         let mut cmd = verifier.run_command(cargo_path, be_quiet);
-        cmd.env("CARGO_PX_WORKSPACE_ROOT_DIR", workspace_path)
-            .stdout(std::process::Stdio::inherit())
-            .stderr(std::process::Stdio::inherit());
+
+        cmd.env(
+            "CARGO_PX_GENERATED_PKG_MANIFEST_PATH",
+            package_metadata.manifest_path(),
+        )
+        .env("CARGO_PX_WORKSPACE_ROOT_DIR", workspace_path)
+        .stdout(std::process::Stdio::inherit())
+        .stderr(std::process::Stdio::inherit());
 
         let err_msg = || {
             format!(
@@ -202,9 +207,14 @@ fn generate_crate(
         let timer = Instant::now();
         let _ = shell.status("Generating", format!("`{}`", unit.package_metadata.name()));
         let mut cmd = unit.generator.run_command(cargo_path, be_quiet);
-        cmd.env("CARGO_PX_WORKSPACE_ROOT_DIR", workspace_path)
-            .stdout(std::process::Stdio::inherit())
-            .stderr(std::process::Stdio::inherit());
+
+        cmd.env(
+            "CARGO_PX_GENERATED_PKG_MANIFEST_PATH",
+            unit.package_metadata.manifest_path(),
+        )
+        .env("CARGO_PX_WORKSPACE_ROOT_DIR", workspace_path)
+        .stdout(std::process::Stdio::inherit())
+        .stderr(std::process::Stdio::inherit());
 
         let err_msg = || {
             format!(
