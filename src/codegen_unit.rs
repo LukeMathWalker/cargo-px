@@ -29,7 +29,9 @@ impl<'graph> BinaryInvocation<'graph> {
     /// Build a `std::process::Command` that invokes the binary.
     pub fn run_command(&self, cargo_path: &str, be_quiet: bool) -> std::process::Command {
         let mut cmd = self.binary.run_command(cargo_path, be_quiet);
-        cmd.args(&self.args);
+        if !self.args.is_empty() {
+            cmd.arg("--").args(&self.args);
+        }
         cmd
     }
 
