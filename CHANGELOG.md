@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.15](https://github.com/LukeMathWalker/cargo-px/compare/cargo-px-v0.1.14...cargo-px-v0.1.15) - 2024-02-23
+
+### Other
+- Add `cargo px verify-freshness` ([#34](https://github.com/LukeMathWalker/cargo-px/pull/34))
+
 ## [0.1.14](https://github.com/LukeMathWalker/cargo-px/compare/cargo-px-v0.1.13...cargo-px-v0.1.14) - 2023-12-09
 
 ### Other
