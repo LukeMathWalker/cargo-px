@@ -98,7 +98,7 @@ impl<'graph> AugmentedPackageGraph<'graph> {
 
         // Add edges from the generator package to the respective codegen units.
         for codegen_unit in codegen_units {
-            let target_node_id = pkg_id2node_id[codegen_unit.generator_package_id];
+            let target_node_id = pkg_id2node_id[codegen_unit.generator.binary.package_id];
             let codegen_node_id = pkg_id2node_id[codegen_unit.package_metadata.id()];
             dep_graph.update_edge(
                 codegen_node_id,

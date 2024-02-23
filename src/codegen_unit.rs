@@ -1,6 +1,6 @@
 //! Logic to retrieve and validate codegen units defined in the current workspace.
 
-use crate::config::{GenerateConfig, ManifestMetadata, PxConfig};
+use crate::config::{GenerateConfig, ManifestMetadata, PxConfig, VerifyConfig};
 use anyhow::Context;
 use guppy::{
     graph::{BuildTargetKind, PackageGraph, PackageMetadata},
@@ -12,17 +12,74 @@ use guppy::{
 pub(crate) struct CodegenUnit<'graph> {
     /// The metadata of the package that requires code generation.
     pub(crate) package_metadata: PackageMetadata<'graph>,
-    /// The name of the binary to be invoked in order to perform code generation.
+    pub(crate) generator: BinaryInvocation<'graph>,
+    pub(crate) verifier: Option<BinaryInvocation<'graph>>,
+}
+
+#[derive(Debug, Clone)]
+pub(crate) struct BinaryInvocation<'graph> {
+    /// The binary to be invoked.
     /// It must be a binary defined within the same workspace.
-    pub(crate) generator_name: String,
-    /// The arguments to be passed to the generator binary.
-    pub(crate) generator_args: Vec<String>,
-    /// The package ID of the package that defines the binary to be invoked
-    /// in order to perform code generation.
-    pub(crate) generator_package_id: &'graph PackageId,
-    /// The metadata of the package that defines the binary to be invoked
-    /// in order to perform code generation.
-    pub(crate) generator_package_metadata: PackageMetadata<'graph>,
+    pub(crate) binary: WorkspaceBinary<'graph>,
+    /// The arguments to be passed to the binary when invoked.
+    pub(crate) args: Vec<String>,
+}
+
+impl<'graph> BinaryInvocation<'graph> {
+    /// Build a `std::process::Command` that invokes the binary.
+    pub fn run_command(&self, cargo_path: &str, be_quiet: bool) -> std::process::Command {
+        let mut cmd = self.binary.run_command(cargo_path, be_quiet);
+        if !self.args.is_empty() {
+            cmd.arg("--").args(&self.args);
+        }
+        cmd
+    }
+
+    /// Build a `std::process::Command` that builds the code generator for this
+    /// codegen unit.
+    pub fn build_command(&self, cargo_path: &str, be_quiet: bool) -> std::process::Command {
+        self.binary.build_command(cargo_path, be_quiet)
+    }
+}
+
+#[derive(Debug, Clone)]
+pub(crate) struct WorkspaceBinary<'graph> {
+    /// The name of a binary defined within the current workspace.
+    pub(crate) name: String,
+    /// The package ID of the local package that defines the binary.
+    pub(crate) package_id: &'graph PackageId,
+    /// The metadata of the local package that defines the binary.
+    pub(crate) package_metadata: PackageMetadata<'graph>,
+}
+
+impl<'graph> WorkspaceBinary<'graph> {
+    /// Build a `std::process::Command` that invokes the binary.
+    pub fn run_command(&self, cargo_path: &str, be_quiet: bool) -> std::process::Command {
+        let mut cmd = std::process::Command::new(cargo_path);
+        cmd.arg("run")
+            .arg("--package")
+            .arg(self.package_metadata.name())
+            .arg("--bin")
+            .arg(&self.name);
+        if be_quiet {
+            cmd.arg("--quiet");
+        }
+        cmd
+    }
+
+    /// Build a `std::process::Command` that builds the binary.
+    pub fn build_command(&self, cargo_path: &str, be_quiet: bool) -> std::process::Command {
+        let mut cmd = std::process::Command::new(cargo_path);
+        cmd.arg("build")
+            .arg("--package")
+            .arg(self.package_metadata.name())
+            .arg("--bin")
+            .arg(&self.name);
+        if be_quiet {
+            cmd.arg("--quiet");
+        }
+        cmd
+    }
 }
 
 impl<'graph> CodegenUnit<'graph> {
@@ -35,7 +92,7 @@ impl<'graph> CodegenUnit<'graph> {
         pkg_metadata: PackageMetadata<'graph>,
         pkg_graph: &'graph PackageGraph,
     ) -> Result<CodegenUnit<'graph>, anyhow::Error> {
-        let GenerateConfig::CargoWorkspaceBinary(px_config) = px_config.generate;
+        let GenerateConfig::CargoWorkspaceBinary(gen_config) = px_config.generate;
 
         let mut generator_package_id = None;
         for workspace_member in pkg_graph.workspace().iter() {
@@ -45,7 +102,7 @@ impl<'graph> CodegenUnit<'graph> {
 
             for target in workspace_member.build_targets() {
                 if target.kind() == BuildTargetKind::Binary
-                    && target.name() == px_config.generator_name
+                    && target.name() == gen_config.generator_name
                 {
                     generator_package_id = Some(workspace_member.id());
                     break;
@@ -53,68 +110,78 @@ impl<'graph> CodegenUnit<'graph> {
             }
         }
 
-        match generator_package_id {
-            Some(generator_package_id) => {
-                let generator_package_metadata =
-                    pkg_graph.metadata(generator_package_id).with_context(|| {
-                        format!(
-                            "Failed to retrieve the metadata of the package that defines `{}`, \
+        let Some(generator_package_id) = generator_package_id else {
+            anyhow::bail!(
+                "There is no binary named `{}` in the workspace, but it's listed as the generator name for package `{}`",
+                gen_config.generator_name,
+                pkg_metadata.name(),
+            );
+        };
+        let generator_package_metadata =
+            pkg_graph.metadata(generator_package_id).with_context(|| {
+                format!(
+                    "Failed to retrieve the metadata of the package that defines `{}`, \
                             the code generator binary",
-                            px_config.generator_name
-                        )
-                    })?;
-                Ok(CodegenUnit {
-                    package_metadata: pkg_metadata,
-                    generator_name: px_config.generator_name,
-                    generator_args: px_config.generator_args,
-                    generator_package_id,
-                    generator_package_metadata,
-                })
+                    gen_config.generator_name
+                )
+            })?;
+        let generator = BinaryInvocation {
+            binary: WorkspaceBinary {
+                name: gen_config.generator_name,
+                package_id: generator_package_id,
+                package_metadata: generator_package_metadata,
+            },
+            args: gen_config.generator_args,
+        };
+
+        let mut verifier = None;
+        if let Some(VerifyConfig::CargoWorkspaceBinary(verify_config)) = px_config.verify {
+            let mut verifier_package_id = None;
+            for workspace_member in pkg_graph.workspace().iter() {
+                if workspace_member.id() == pkg_metadata.id() {
+                    continue;
+                }
+
+                for target in workspace_member.build_targets() {
+                    if target.kind() == BuildTargetKind::Binary
+                        && target.name() == verify_config.verifier_name
+                    {
+                        verifier_package_id = Some(workspace_member.id());
+                        break;
+                    }
+                }
             }
-            None => {
-                let error = anyhow::anyhow!(
-                    "There is no binary named `{}` in the workspace, but it's listed as the generator name for package `{}`",
-                    px_config.generator_name,
+
+            let Some(verifier_package_id) = verifier_package_id else {
+                anyhow::bail!(
+                    "There is no binary named `{}` in the workspace, but it's listed as the verifier name for package `{}`",
+                    verify_config.verifier_name,
                     pkg_metadata.name(),
                 );
-                Err(error)
-            }
+            };
+            let verifier_package_metadata =
+                pkg_graph.metadata(verifier_package_id).with_context(|| {
+                    format!(
+                        "Failed to retrieve the metadata of the package that defines `{}`, \
+                        the verifier binary",
+                        verify_config.verifier_name
+                    )
+                })?;
+            verifier = Some(BinaryInvocation {
+                binary: WorkspaceBinary {
+                    name: verify_config.verifier_name,
+                    package_id: verifier_package_id,
+                    package_metadata: verifier_package_metadata,
+                },
+                args: verify_config.verifier_args,
+            });
         }
-    }
 
-    /// Build a `std::process::Command` that invokes the code generator for this
-    /// codegen unit.
-    pub fn run_command(&self, cargo_path: &str, be_quiet: bool) -> std::process::Command {
-        let mut cmd = std::process::Command::new(cargo_path);
-        cmd.arg("run")
-            .arg("--package")
-            .arg(self.generator_package_metadata.name())
-            .arg("--bin")
-            .arg(&self.generator_name)
-            .args(&self.generator_args)
-            .env(
-                "CARGO_PX_GENERATED_PKG_MANIFEST_PATH",
-                self.package_metadata.manifest_path(),
-            );
-        if be_quiet {
-            cmd.arg("--quiet");
-        }
-        cmd
-    }
-
-    /// Build a `std::process::Command` that builds the code generator for this
-    /// codegen unit.
-    pub fn build_command(&self, cargo_path: &str, be_quiet: bool) -> std::process::Command {
-        let mut cmd = std::process::Command::new(cargo_path);
-        cmd.arg("build")
-            .arg("--package")
-            .arg(self.generator_package_metadata.name())
-            .arg("--bin")
-            .arg(&self.generator_name);
-        if be_quiet {
-            cmd.arg("--quiet");
-        }
-        cmd
+        Ok(CodegenUnit {
+            package_metadata: pkg_metadata,
+            generator,
+            verifier,
+        })
     }
 }
 
@@ -142,7 +209,7 @@ pub(crate) fn extract_codegen_units(
             }
             Err(e) => {
                 let e = anyhow::anyhow!(e).context(format!(
-                    "Failed to deserialize `cargo px`'s configuration from the manifest of `{}`",
+                    "Failed to deserialize `cargo px`'s codegen configuration from the manifest of `{}`",
                     p_metadata.name(),
                 ));
                 errors.push(e)
