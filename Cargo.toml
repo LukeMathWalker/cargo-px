@@ -16,7 +16,7 @@ pr-run-mode = "plan"
 
 [package]
 name = "cargo-px"
-version = "0.1.15"
+version = "0.1.16"
 edition = "2021"
 keywords = ["cargo", "generator", "build", "scripts", "generate"]
 description = "A cargo sub-command to overcome some of the limitations of build scripts for code generation."
