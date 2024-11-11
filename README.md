@@ -122,7 +122,7 @@ If you're using a macOS machine, you probably want to [disable gatekeeper notari
 Quick guide:
 
 - Run
-  ``bash
+  ```bash
   spctl developer-mode enable-terminal
   ```
   from your terminal
