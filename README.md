@@ -119,10 +119,18 @@ You can use the [`cargo_px_env`](https://crates.io/crates/cargo_px_env) crate to
 ### MacOS
 
 If you're using a macOS machine, you probably want to [disable gatekeeper notarisation for your terminal](https://apple.stackexchange.com/questions/403184/disable-gatekeeper-notarisation-check-without-disabling-sip/403185#403185).
+Quick guide:
+
+- Run
+  ``bash
+  spctl developer-mode enable-terminal
+  ```
+  from your terminal
+- Then enable it in "Settings" -> "Security & Privacy" -> "Developer Tools"
 
 Every time you execute a binary for the first time, Apple [executes a request over the network to their servers](https://sigpipe.macromates.com/2020/macos-catalina-slow-by-design/). This becomes an issue for `cargo-px`, since it must compile your generator and then execute it: the generator binary is "new", therefore it incurs the penalty of this notarisation check.  
 The magnitude of the delay depends on the quality of your connection as well as on Apple's servers performance. On a good Internet connection, I consistenly observed 100/150ms delays, but delays in the order of seconds have been reported as well.  
-Fun aside: if you're working without an Internet connection, Apple skips the check entirely and lets you execute unverified binaries without any complaint.
+Fun aside: if you're working without an Internet connection, Apple skips the check entirely and lets you execute unverified binaries without complaint.
 
 
 ## License
