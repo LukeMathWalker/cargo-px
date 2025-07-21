@@ -43,9 +43,11 @@ fn main() {
         than `cargo-px [...]` (notice the missing dash in the first one!). \n
         If you're invoking it as expected but it's showing this error message, please file a bug.",
     );
-    // The first arg is always `cargo` and the second arg is always the name
-    // of the sub-command, i.e. `px` in our case.
-    let forwarded_args: Vec<_> = std::env::args().skip(2).collect();
+    let mut args = std::env::args();
+    args.next(); // Skip the first argument, since it's always `cargo`
+    let args: Vec<_> = args.collect();
+    // Skip the `px` argument.
+    let forwarded_args = &args[1..];
 
     let be_quiet = forwarded_args
         .iter()
@@ -75,7 +77,8 @@ fn main() {
         ]
         .contains(&cargo_command.as_str())
         {
-            if let Err(errors) = cargo_px::codegen(&cargo_path, &mut shell) {
+            let cwd = std::env::current_dir().expect("Failed to get current working directory");
+            if let Err(errors) = cargo_px::codegen(&cargo_path, &cwd, &args, &mut shell) {
                 for error in errors {
                     let _ = display_error(&error, &mut shell);
                 }

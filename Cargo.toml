@@ -10,7 +10,13 @@ ci = ["github"]
 # The installers to generate for each app
 installers = ["shell", "powershell"]
 # Target platforms to build apps for (Rust target-triple syntax)
-targets = ["x86_64-unknown-linux-gnu", "aarch64-apple-darwin", "x86_64-apple-darwin", "x86_64-unknown-linux-musl", "x86_64-pc-windows-msvc"]
+targets = [
+    "x86_64-unknown-linux-gnu",
+    "aarch64-apple-darwin",
+    "x86_64-apple-darwin",
+    "x86_64-unknown-linux-musl",
+    "x86_64-pc-windows-msvc",
+]
 # Publish jobs to run in CI
 pr-run-mode = "plan"
 
@@ -31,12 +37,17 @@ name = "cargo-px"
 [dependencies]
 ahash = "0.8.3"
 anyhow = "1.0.70"
+clap = "4"
 guppy = "0.17.2"
 petgraph = { version = "0.6.3", features = ["stable_graph"] }
 serde = { version = "1.0.160", features = ["derive"] }
 serde_json = "1.0.96"
 tracing = "0.1.37"
-tracing-subscriber = { version = "0.3.17", features = ["env-filter", "fmt", "time"] }
+tracing-subscriber = { version = "0.3.17", features = [
+    "env-filter",
+    "fmt",
+    "time",
+] }
 textwrap = "0.16"
 once_cell = "1.17.1"
 anstream = "0.6.4"
