@@ -3,21 +3,84 @@ use std::time::Instant;
 
 use anyhow::Context;
 use guppy::graph::{PackageGraph, PackageMetadata};
+use targets::determine_targets;
 
 use crate::codegen_unit::{extract_codegen_units, BinaryInvocation};
+
 mod codegen_plan;
 mod codegen_unit;
 mod config;
 mod shell;
+mod targets;
 
 pub use shell::{Shell, Verbosity};
 
 /// Find all codegen units in the current workspace and perform code generation for each of them,
 /// in an order that takes into account their respective dependency relationships.
 #[tracing::instrument(level = tracing::Level::DEBUG, name = "Generate crates", skip(cargo_path))]
-pub fn codegen(cargo_path: &str, shell: &mut Shell) -> Result<(), Vec<anyhow::Error>> {
+pub fn codegen(
+    cargo_path: &str,
+    working_directory: &Path,
+    args: &[String],
+    shell: &mut Shell,
+) -> Result<(), Vec<anyhow::Error>> {
     let package_graph = package_graph(cargo_path, shell).map_err(|e| vec![e])?;
-    let codegen_units = extract_codegen_units(&package_graph)?;
+    let mut codegen_units = extract_codegen_units(&package_graph)?;
+
+    if tracing::event_enabled!(tracing::Level::DEBUG) {
+        let codegen_unit_names: Vec<_> = codegen_units
+            .iter()
+            .map(|unit| unit.package_metadata.name().to_string())
+            .collect();
+        tracing::debug!(
+            ?codegen_unit_names,
+            "Determined the list of codegen units in the current workspace"
+        );
+    }
+
+    let targets = determine_targets(args, working_directory, &package_graph);
+
+    if tracing::event_enabled!(tracing::Level::DEBUG) {
+        let codegen_unit_names: Vec<_> = targets
+            .iter()
+            .map(|id| {
+                package_graph
+                    .metadata(id)
+                    .expect("Unknown package id")
+                    .name()
+                    .to_owned()
+            })
+            .collect();
+        tracing::debug!(
+            ?codegen_unit_names,
+            "Determined the list of target packages for this invocation"
+        );
+    }
+
+    // Keep only the codegen units that appear in the dependency graph of the targets we've chosen
+    if !targets.is_empty() {
+        let mut depends_cache = package_graph.new_depends_cache();
+        codegen_units.retain(|unit| {
+            targets.iter().any(|target_id| {
+                unit.package_metadata.id() == target_id
+                    || depends_cache
+                        .depends_on(target_id, unit.package_metadata.id())
+                        .unwrap_or(false)
+            })
+        });
+    }
+
+    if tracing::event_enabled!(tracing::Level::DEBUG) {
+        let codegen_unit_names: Vec<_> = codegen_units
+            .iter()
+            .map(|unit| unit.package_metadata.name().to_string())
+            .collect();
+        tracing::debug!(
+            ?codegen_unit_names,
+            "Retaining only the following codegen units for this invocation, based on the target packages"
+        );
+    }
+
     let codegen_plan = codegen_plan::codegen_plan(codegen_units, &package_graph)?;
 
     let workspace_dir = package_graph
