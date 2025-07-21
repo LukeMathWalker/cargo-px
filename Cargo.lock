@@ -99,7 +99,7 @@ dependencies = [
 
 [[package]]
 name = "cargo-px"
-version = "0.1.16"
+version = "0.1.17"
 dependencies = [
  "ahash",
  "anstream",

@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.17](https://github.com/LukeMathWalker/cargo-px/compare/cargo-px-v0.1.16...cargo-px-v0.1.17) - 2025-07-21
+
+### Added
+
+- Honor a subset of cargo's package filtering options ([#39](https://github.com/LukeMathWalker/cargo-px/pull/39))
+
 ## [0.1.16](https://github.com/LukeMathWalker/cargo-px/compare/cargo-px-v0.1.15...cargo-px-v0.1.16) - 2024-07-08
 
 ### Other
