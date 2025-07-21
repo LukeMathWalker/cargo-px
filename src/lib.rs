@@ -41,7 +41,7 @@ pub fn codegen(
     let targets = determine_targets(args, working_directory, &package_graph);
 
     if tracing::event_enabled!(tracing::Level::DEBUG) {
-        let codegen_unit_names: Vec<_> = targets
+        let target_names: Vec<_> = targets
             .iter()
             .map(|id| {
                 package_graph
@@ -52,7 +52,7 @@ pub fn codegen(
             })
             .collect();
         tracing::debug!(
-            ?codegen_unit_names,
+            ?target_names,
             "Determined the list of target packages for this invocation"
         );
     }

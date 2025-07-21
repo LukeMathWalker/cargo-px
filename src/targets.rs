@@ -62,17 +62,23 @@ fn find_implicit_target(
     working_directory: &Path,
     package_graph: &PackageGraph,
 ) -> Option<PackageId> {
+    let workspace_root = package_graph.workspace().root();
+    // All workspace paths in the graph are relative to the workspace root.
+    let working_directory = working_directory
+        .strip_prefix(workspace_root)
+        .unwrap_or(working_directory);
     package_graph
         .workspace()
         .iter_by_path()
-        .min_by_key(|(path, _)| {
+        .filter_map(|(path, package_metadata)| {
             if let Ok(suffix) = working_directory.strip_prefix(path) {
-                Some(suffix.components().count())
+                Some((package_metadata, suffix.components().count()))
             } else {
                 None
             }
         })
-        .map(|(_, package_metadata)| package_metadata.id().to_owned())
+        .min_by_key(|(_, count)| *count)
+        .map(|(package_metadata, _)| package_metadata.id().to_owned())
 }
 
 /// Check if the user has specified a list of package specs to be considered.
