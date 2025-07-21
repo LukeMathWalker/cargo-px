@@ -403,7 +403,7 @@ impl Shell {
         // Path may fail to serialize to JSON ...
         let encoded = serde_json::to_string(&obj)?;
         // ... but don't fail due to a closed pipe.
-        drop(writeln!(self.out(), "{}", encoded));
+        drop(writeln!(self.out(), "{encoded}"));
         Ok(())
     }
 }
