@@ -3,7 +3,7 @@ members = [".", "cargo_px_env"]
 
 [package]
 name = "cargo-px"
-version = "0.1.17"
+version = "0.1.18"
 edition = "2021"
 keywords = ["cargo", "generator", "build", "scripts", "generate"]
 description = "A cargo sub-command to overcome some of the limitations of build scripts for code generation."
