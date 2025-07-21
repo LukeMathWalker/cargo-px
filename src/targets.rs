@@ -66,7 +66,7 @@ fn find_implicit_target(
         .workspace()
         .iter_by_path()
         .min_by_key(|(path, _)| {
-            if let Ok(suffix) = working_directory.strip_prefix(&path) {
+            if let Ok(suffix) = working_directory.strip_prefix(path) {
                 Some(suffix.components().count())
             } else {
                 None

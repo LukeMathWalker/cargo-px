@@ -42,8 +42,8 @@ fn gethostname() -> io::Result<OsString> {
         return Err(io::Error::last_os_error());
     }
     let Ok(maxlen) = usize::try_from(limit) else {
-        let msg = format!("host name max limit ({}) overflowed usize", limit);
-        return Err(io::Error::new(io::ErrorKind::Other, msg));
+        let msg = format!("host name max limit ({limit}) overflowed usize");
+        return Err(io::Error::other(msg));
     };
     // maxlen here includes the NUL terminator.
     let mut buf = vec![0; maxlen];
@@ -59,7 +59,7 @@ fn gethostname() -> io::Result<OsString> {
     // lol). So if we can't find a NUL terminator, then just give up.
     let Some(zeropos) = buf.iter().position(|&b| b == 0) else {
         let msg = "could not find NUL terminator in hostname";
-        return Err(io::Error::new(io::ErrorKind::Other, msg));
+        return Err(io::Error::other(msg));
     };
     buf.truncate(zeropos);
     buf.shrink_to_fit();
