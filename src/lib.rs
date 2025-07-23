@@ -2,6 +2,7 @@ use std::path::Path;
 use std::time::Instant;
 
 use anyhow::Context;
+use codegen_unit::CodegenUnit;
 use guppy::graph::{PackageGraph, PackageMetadata};
 use targets::determine_targets;
 
@@ -25,7 +26,65 @@ pub fn codegen(
     shell: &mut Shell,
 ) -> Result<(), Vec<anyhow::Error>> {
     let package_graph = package_graph(cargo_path, shell).map_err(|e| vec![e])?;
-    let mut codegen_units = extract_codegen_units(&package_graph)?;
+    let codegen_plan = compute_filtered_codegen_plan(working_directory, args, &package_graph)?;
+
+    let workspace_dir = package_graph
+        .workspace()
+        .root()
+        .canonicalize()
+        .context("Failed to get the canonical path to the root directory of this workspace")
+        .map_err(|e| vec![e])?;
+    for unit in codegen_plan {
+        generate_crate(&unit, cargo_path, &workspace_dir, shell).map_err(|e| vec![e])?;
+    }
+
+    Ok(())
+}
+
+/// Find all codegen units in the current workspace and verify that the associated projects
+/// are fresh—i.e. they don't need to be regenerated.
+#[tracing::instrument(level = tracing::Level::DEBUG, name = "Verify freshness", skip(cargo_path))]
+pub fn verify(
+    cargo_path: &str,
+    working_directory: &Path,
+    args: &[String],
+    shell: &mut Shell,
+) -> Result<(), Vec<anyhow::Error>> {
+    let package_graph = package_graph(cargo_path, shell).map_err(|e| vec![e])?;
+    let codegen_plan = compute_filtered_codegen_plan(working_directory, args, &package_graph)?;
+
+    let workspace_dir = package_graph
+        .workspace()
+        .root()
+        .canonicalize()
+        .context("Failed to get the canonical path to the root directory of this workspace")
+        .map_err(|e| vec![e])?;
+    for unit in codegen_plan {
+        let Some(verifier) = &unit.verifier else {
+            return Err(vec![anyhow::anyhow!(
+                "`{}` doesn't define a verifier, therefore we can't verify if it's fresh",
+                unit.package_metadata.name()
+            )]);
+        };
+        verify_crate(
+            verifier,
+            &unit.package_metadata,
+            cargo_path,
+            &workspace_dir,
+            shell,
+        )
+        .map_err(|e| vec![e])?;
+    }
+
+    Ok(())
+}
+
+fn compute_filtered_codegen_plan<'a>(
+    working_directory: &Path,
+    args: &[String],
+    package_graph: &'a PackageGraph,
+) -> Result<Vec<CodegenUnit<'a>>, Vec<anyhow::Error>> {
+    let mut codegen_units = extract_codegen_units(package_graph)?;
 
     if tracing::event_enabled!(tracing::Level::DEBUG) {
         let codegen_unit_names: Vec<_> = codegen_units
@@ -38,7 +97,7 @@ pub fn codegen(
         );
     }
 
-    let targets = determine_targets(args, working_directory, &package_graph);
+    let targets = determine_targets(args, working_directory, package_graph);
 
     if tracing::event_enabled!(tracing::Level::DEBUG) {
         let target_names: Vec<_> = targets
@@ -81,53 +140,7 @@ pub fn codegen(
         );
     }
 
-    let codegen_plan = codegen_plan::codegen_plan(codegen_units, &package_graph)?;
-
-    let workspace_dir = package_graph
-        .workspace()
-        .root()
-        .canonicalize()
-        .context("Failed to get the canonical path to the root directory of this workspace")
-        .map_err(|e| vec![e])?;
-    for unit in codegen_plan {
-        generate_crate(&unit, cargo_path, &workspace_dir, shell).map_err(|e| vec![e])?;
-    }
-
-    Ok(())
-}
-
-/// Find all codegen units in the current workspace and verify that the associated projects
-/// are fresh—i.e. they don't need to be regenerated.
-#[tracing::instrument(level = tracing::Level::DEBUG, name = "Verify freshness", skip(cargo_path))]
-pub fn verify(cargo_path: &str, shell: &mut Shell) -> Result<(), Vec<anyhow::Error>> {
-    let package_graph = package_graph(cargo_path, shell).map_err(|e| vec![e])?;
-    let codegen_units = extract_codegen_units(&package_graph)?;
-    let codegen_plan = codegen_plan::codegen_plan(codegen_units, &package_graph)?;
-
-    let workspace_dir = package_graph
-        .workspace()
-        .root()
-        .canonicalize()
-        .context("Failed to get the canonical path to the root directory of this workspace")
-        .map_err(|e| vec![e])?;
-    for unit in codegen_plan {
-        let Some(verifier) = &unit.verifier else {
-            return Err(vec![anyhow::anyhow!(
-                "`{}` doesn't define a verifier, therefore we can't verify if it's fresh",
-                unit.package_metadata.name()
-            )]);
-        };
-        verify_crate(
-            verifier,
-            &unit.package_metadata,
-            cargo_path,
-            &workspace_dir,
-            shell,
-        )
-        .map_err(|e| vec![e])?;
-    }
-
-    Ok(())
+    codegen_plan::codegen_plan(codegen_units, package_graph)
 }
 
 #[tracing::instrument(name = "Verify crate", skip_all, fields(crate_name = %package_metadata.name()))]

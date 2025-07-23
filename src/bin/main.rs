@@ -57,10 +57,11 @@ fn main() {
     }
 
     let mut has_codegened = false;
+    let cwd = std::env::current_dir().expect("Failed to get current working directory");
     if let Some(cargo_command) = forwarded_args.first() {
         // This is not a proxy for a `cargo` command, it is a `cargo-px` command.
         if "verify-freshness" == cargo_command.as_str() {
-            if let Err(errors) = cargo_px::verify(&cargo_path, &mut shell) {
+            if let Err(errors) = cargo_px::verify(&cargo_path, &cwd, &args, &mut shell) {
                 for error in errors {
                     let _ = display_error(&error, &mut shell);
                 }
@@ -77,7 +78,6 @@ fn main() {
         ]
         .contains(&cargo_command.as_str())
         {
-            let cwd = std::env::current_dir().expect("Failed to get current working directory");
             if let Err(errors) = cargo_px::codegen(&cargo_path, &cwd, &args, &mut shell) {
                 for error in errors {
                     let _ = display_error(&error, &mut shell);
