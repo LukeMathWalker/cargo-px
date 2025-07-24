@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en" id="oranda" class="dark">
+  <head>
+    <title>cargo-px</title>
+    
+    
+      <link rel="icon" href="/cargo-px/favicon.ico" />
+    
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+      <meta name="description" content="A cargo sub-command to overcome some of the limitations of build scripts for code generation." />
+      <meta property="og:description" content="A cargo sub-command to overcome some of the limitations of build scripts for code generation." />
+    
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="cargo-px" />
+    
+    
+    
+    <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+    <link rel="stylesheet" href="/cargo-px/oranda-v0.6.1.css" />
+    
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="page-body">
+        
+          <div class="repo_banner">
+            <a href="https://github.com/LukeMathWalker/cargo-px">
+              <div class="github-icon" aria-hidden="true"></div>
+              Check out our GitHub!
+            </a>
+          </div>
+        
+
+        <main>
+          <header>
+            
+            <h1 class="title">cargo-px</h1>
+            
+  <nav class="nav">
+    <ul>
+      <li><a href="/cargo-px/">Home</a></li>
+
+      
+
+      
+        <li><a href="/cargo-px/artifacts/">Install</a></li>
+      
+
+      
+
+      
+
+      
+        <li><a href="/cargo-px/changelog/">Changelog</a></li>
+      
+    </ul>
+  </nav>
+
+          </header>
+
+          
+
+    
+
+
+
+<div class="artifacts" data-tag="cargo-px-v0.1.20">
+  <div class="artifact-header target">
+    <h4>Install cargo-px-v0.1.20</h4>
+    
+      <div><small class="published-date">Published on Jul 24 2025 at 15:16 UTC</small></div>
+    
+
+    <ul class="arches">
+      
+        <li class="arch hidden" data-arch="aarch64-apple-darwin">
+          
+            <ul class="tabs">
+              
+                
+                
+                <li class="install-tab" data-id="3" data-triple="aarch64-apple-darwin">
+                  shell
+
+                  
+                </li>
+              
+                
+                
+                <li class="install-tab" data-id="0" data-triple="aarch64-apple-darwin">
+                  cargo
+
+                  
+                </li>
+              
+                
+                
+                <li class="install-tab" data-id="1" data-triple="aarch64-apple-darwin">
+                  tarball
+
+                  
+                </li>
+              
+            </ul>
+          
+
+          <ul class="contents">
+            
+              
+              <li data-id="3" data-triple="aarch64-apple-darwin" class="install-content">
+                
+                  
+                  <div class="install-code-wrapper">
+  <pre style="background-color:#263238;">
+<span style="color:#82aaff;">curl</span><span style="color:#89ddff;"> --</span><span style="color:#f78c6c;">proto </span><span style="color:#89ddff;">&#39;</span><span style="color:#c3e88d;">=https</span><span style="color:#89ddff;">&#39; --</span><span style="color:#f78c6c;">tlsv1</span><span style="color:#82aaff;">.2</span><span style="color:#89ddff;"> -</span><span style="color:#f78c6c;">LsSf</span><span style="color:#82aaff;"> https://github.com/LukeMathWalker/cargo-px/releases/download/cargo-px-v0.1.20/cargo-px-installer.sh </span><span style="color:#89ddff;">| </span><span style="color:#82aaff;">sh</span></pre>
+
+  <button class="button copy-clipboard-button primary" data-copy="curl --proto '=https' --tlsv1.2 -LsSf https://github.com/LukeMathWalker/cargo-px/releases/download/cargo-px-v0.1.20/cargo-px-installer.sh | sh">
+    <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+  </button>
+  
+  
+    
+    
+      
+    
+    <a class="button primary" href="/cargo-px/cargo-px-installer.sh.txt">Source</a>
+  
+</div>
+                
+
+                
+              </li>
+            
+              
+              <li data-id="0" data-triple="aarch64-apple-darwin" class="install-content hidden">
+                
+                  
+                  <div class="install-code-wrapper">
+  <pre style="background-color:#263238;">
+<span style="color:#82aaff;">cargo install</span><span style="color:#89ddff;"> --</span><span style="color:#f78c6c;">locked</span><span style="color:#82aaff;"> cargo-px</span></pre>
+
+  <button class="button copy-clipboard-button primary" data-copy="cargo install --locked cargo-px">
+    <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+  </button>
+  
+  
+</div>
+                
+
+                
+              </li>
+            
+              
+              <li data-id="1" data-triple="aarch64-apple-darwin" class="install-content hidden">
+                
+
+                
+                  
+                  <div class="download-wrapper">
+                    <a href="https://github.com/LukeMathWalker/cargo-px/releases/download/cargo-px-v0.1.20/cargo-px-aarch64-apple-darwin.tar.xz">
+                      <button class="button primary">
+                        <span>Download</span>
+                        <span class="button-subtitle">cargo-px-aarch64-apple-darwin.tar.xz</span>
+                      </button>
+                    </a>
+                  </div>
+                
+              </li>
+            
+          </ul>
+        </li>
+      
+        <li class="arch hidden" data-arch="x86_64-apple-darwin">
+          
+            <ul class="tabs">
+              
+                
+                
+                <li class="install-tab" data-id="3" data-triple="x86_64-apple-darwin">
+                  shell
+
+                  
+                </li>
+              
+                
+                
+                <li class="install-tab" data-id="0" data-triple="x86_64-apple-darwin">
+                  cargo
+
+                  
+                </li>
+              
+                
+                
+                <li class="install-tab" data-id="4" data-triple="x86_64-apple-darwin">
+                  tarball
+
+                  
+                </li>
+              
+            </ul>
+          
+
+          <ul class="contents">
+            
+              
+              <li data-id="3" data-triple="x86_64-apple-darwin" class="install-content">
+                
+                  
+                  <div class="install-code-wrapper">
+  <pre style="background-color:#263238;">
+<span style="color:#82aaff;">curl</span><span style="color:#89ddff;"> --</span><span style="color:#f78c6c;">proto </span><span style="color:#89ddff;">&#39;</span><span style="color:#c3e88d;">=https</span><span style="color:#89ddff;">&#39; --</span><span style="color:#f78c6c;">tlsv1</span><span style="color:#82aaff;">.2</span><span style="color:#89ddff;"> -</span><span style="color:#f78c6c;">LsSf</span><span style="color:#82aaff;"> https://github.com/LukeMathWalker/cargo-px/releases/download/cargo-px-v0.1.20/cargo-px-installer.sh </span><span style="color:#89ddff;">| </span><span style="color:#82aaff;">sh</span></pre>
+
+  <button class="button copy-clipboard-button primary" data-copy="curl --proto '=https' --tlsv1.2 -LsSf https://github.com/LukeMathWalker/cargo-px/releases/download/cargo-px-v0.1.20/cargo-px-installer.sh | sh">
+    <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+  </button>
+  
+  
+    
+    
+      
+    
+    <a class="button primary" href="/cargo-px/cargo-px-installer.sh.txt">Source</a>
+  
+</div>
+                
+
+                
+              </li>
+            
+              
+              <li data-id="0" data-triple="x86_64-apple-darwin" class="install-content hidden">
+                
+                  
+                  <div class="install-code-wrapper">
+  <pre style="background-color:#263238;">
+<span style="color:#82aaff;">cargo install</span><span style="color:#89ddff;"> --</span><span style="color:#f78c6c;">locked</span><span style="color:#82aaff;"> cargo-px</span></pre>
+
+  <button class="button copy-clipboard-button primary" data-copy="cargo install --locked cargo-px">
+    <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+  </button>
+  
+  
+</div>
+                
+
+                
+              </li>
+            
+              
+              <li data-id="4" data-triple="x86_64-apple-darwin" class="install-content hidden">
+                
+
+                
+                  
+                  <div class="download-wrapper">
+                    <a href="https://github.com/LukeMathWalker/cargo-px/releases/download/cargo-px-v0.1.20/cargo-px-x86_64-apple-darwin.tar.xz">
+                      <button class="button primary">
+                        <span>Download</span>
+                        <span class="button-subtitle">cargo-px-x86_64-apple-darwin.tar.xz</span>
+                      </button>
+                    </a>
+                  </div>
+                
+              </li>
+            
+          </ul>
+        </li>
+      
+        <li class="arch hidden" data-arch="x86_64-pc-windows-msvc">
+          
+            <ul class="tabs">
+              
+                
+                
+                <li class="install-tab" data-id="2" data-triple="x86_64-pc-windows-msvc">
+                  powershell
+
+                  
+                </li>
+              
+                
+                
+                <li class="install-tab" data-id="0" data-triple="x86_64-pc-windows-msvc">
+                  cargo
+
+                  
+                </li>
+              
+                
+                
+                <li class="install-tab" data-id="5" data-triple="x86_64-pc-windows-msvc">
+                  zip
+
+                  
+                </li>
+              
+            </ul>
+          
+
+          <ul class="contents">
+            
+              
+              <li data-id="2" data-triple="x86_64-pc-windows-msvc" class="install-content">
+                
+                  
+                  <div class="install-code-wrapper">
+  <pre style="background-color:#263238;">
+<span style="color:#82aaff;">powershell</span><span style="color:#89ddff;"> -</span><span style="color:#f78c6c;">c </span><span style="color:#89ddff;">&quot;</span><span style="color:#c3e88d;">irm https://github.com/LukeMathWalker/cargo-px/releases/download/cargo-px-v0.1.20/cargo-px-installer.ps1 | iex</span><span style="color:#89ddff;">&quot;</span></pre>
+
+  <button class="button copy-clipboard-button primary" data-copy="powershell -c "irm https://github.com/LukeMathWalker/cargo-px/releases/download/cargo-px-v0.1.20/cargo-px-installer.ps1 | iex"">
+    <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+  </button>
+  
+  
+    
+    
+      
+    
+    <a class="button primary" href="/cargo-px/cargo-px-installer.ps1.txt">Source</a>
+  
+</div>
+                
+
+                
+              </li>
+            
+              
+              <li data-id="0" data-triple="x86_64-pc-windows-msvc" class="install-content hidden">
+                
+                  
+                  <div class="install-code-wrapper">
+  <pre style="background-color:#263238;">
+<span style="color:#82aaff;">cargo install</span><span style="color:#89ddff;"> --</span><span style="color:#f78c6c;">locked</span><span style="color:#82aaff;"> cargo-px</span></pre>
+
+  <button class="button copy-clipboard-button primary" data-copy="cargo install --locked cargo-px">
+    <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+  </button>
+  
+  
+</div>
+                
+
+                
+              </li>
+            
+              
+              <li data-id="5" data-triple="x86_64-pc-windows-msvc" class="install-content hidden">
+                
+
+                
+                  
+                  <div class="download-wrapper">
+                    <a href="https://github.com/LukeMathWalker/cargo-px/releases/download/cargo-px-v0.1.20/cargo-px-x86_64-pc-windows-msvc.zip">
+                      <button class="button primary">
+                        <span>Download</span>
+                        <span class="button-subtitle">cargo-px-x86_64-pc-windows-msvc.zip</span>
+                      </button>
+                    </a>
+                  </div>
+                
+              </li>
+            
+          </ul>
+        </li>
+      
+        <li class="arch hidden" data-arch="x86_64-unknown-linux-gnu">
+          
+            <ul class="tabs">
+              
+                
+                
+                <li class="install-tab" data-id="3" data-triple="x86_64-unknown-linux-gnu">
+                  shell
+
+                  
+                </li>
+              
+                
+                
+                <li class="install-tab" data-id="0" data-triple="x86_64-unknown-linux-gnu">
+                  cargo
+
+                  
+                </li>
+              
+                
+                
+                <li class="install-tab" data-id="6" data-triple="x86_64-unknown-linux-gnu">
+                  tarball
+
+                  
+                </li>
+              
+            </ul>
+          
+
+          <ul class="contents">
+            
+              
+              <li data-id="3" data-triple="x86_64-unknown-linux-gnu" class="install-content">
+                
+                  
+                  <div class="install-code-wrapper">
+  <pre style="background-color:#263238;">
+<span style="color:#82aaff;">curl</span><span style="color:#89ddff;"> --</span><span style="color:#f78c6c;">proto </span><span style="color:#89ddff;">&#39;</span><span style="color:#c3e88d;">=https</span><span style="color:#89ddff;">&#39; --</span><span style="color:#f78c6c;">tlsv1</span><span style="color:#82aaff;">.2</span><span style="color:#89ddff;"> -</span><span style="color:#f78c6c;">LsSf</span><span style="color:#82aaff;"> https://github.com/LukeMathWalker/cargo-px/releases/download/cargo-px-v0.1.20/cargo-px-installer.sh </span><span style="color:#89ddff;">| </span><span style="color:#82aaff;">sh</span></pre>
+
+  <button class="button copy-clipboard-button primary" data-copy="curl --proto '=https' --tlsv1.2 -LsSf https://github.com/LukeMathWalker/cargo-px/releases/download/cargo-px-v0.1.20/cargo-px-installer.sh | sh">
+    <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+  </button>
+  
+  
+    
+    
+      
+    
+    <a class="button primary" href="/cargo-px/cargo-px-installer.sh.txt">Source</a>
+  
+</div>
+                
+
+                
+              </li>
+            
+              
+              <li data-id="0" data-triple="x86_64-unknown-linux-gnu" class="install-content hidden">
+                
+                  
+                  <div class="install-code-wrapper">
+  <pre style="background-color:#263238;">
+<span style="color:#82aaff;">cargo install</span><span style="color:#89ddff;"> --</span><span style="color:#f78c6c;">locked</span><span style="color:#82aaff;"> cargo-px</span></pre>
+
+  <button class="button copy-clipboard-button primary" data-copy="cargo install --locked cargo-px">
+    <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+  </button>
+  
+  
+</div>
+                
+
+                
+              </li>
+            
+              
+              <li data-id="6" data-triple="x86_64-unknown-linux-gnu" class="install-content hidden">
+                
+
+                
+                  
+                  <div class="download-wrapper">
+                    <a href="https://github.com/LukeMathWalker/cargo-px/releases/download/cargo-px-v0.1.20/cargo-px-x86_64-unknown-linux-gnu.tar.xz">
+                      <button class="button primary">
+                        <span>Download</span>
+                        <span class="button-subtitle">cargo-px-x86_64-unknown-linux-gnu.tar.xz</span>
+                      </button>
+                    </a>
+                  </div>
+                
+              </li>
+            
+          </ul>
+        </li>
+      
+        <li class="arch hidden" data-arch="x86_64-unknown-linux-musl">
+          
+            <ul class="tabs">
+              
+                
+                
+                <li class="install-tab" data-id="3" data-triple="x86_64-unknown-linux-musl">
+                  shell
+
+                  
+                </li>
+              
+                
+                
+                <li class="install-tab" data-id="0" data-triple="x86_64-unknown-linux-musl">
+                  cargo
+
+                  
+                </li>
+              
+                
+                
+                <li class="install-tab" data-id="7" data-triple="x86_64-unknown-linux-musl">
+                  tarball
+
+                  
+                </li>
+              
+            </ul>
+          
+
+          <ul class="contents">
+            
+              
+              <li data-id="3" data-triple="x86_64-unknown-linux-musl" class="install-content">
+                
+                  
+                  <div class="install-code-wrapper">
+  <pre style="background-color:#263238;">
+<span style="color:#82aaff;">curl</span><span style="color:#89ddff;"> --</span><span style="color:#f78c6c;">proto </span><span style="color:#89ddff;">&#39;</span><span style="color:#c3e88d;">=https</span><span style="color:#89ddff;">&#39; --</span><span style="color:#f78c6c;">tlsv1</span><span style="color:#82aaff;">.2</span><span style="color:#89ddff;"> -</span><span style="color:#f78c6c;">LsSf</span><span style="color:#82aaff;"> https://github.com/LukeMathWalker/cargo-px/releases/download/cargo-px-v0.1.20/cargo-px-installer.sh </span><span style="color:#89ddff;">| </span><span style="color:#82aaff;">sh</span></pre>
+
+  <button class="button copy-clipboard-button primary" data-copy="curl --proto '=https' --tlsv1.2 -LsSf https://github.com/LukeMathWalker/cargo-px/releases/download/cargo-px-v0.1.20/cargo-px-installer.sh | sh">
+    <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+  </button>
+  
+  
+    
+    
+      
+    
+    <a class="button primary" href="/cargo-px/cargo-px-installer.sh.txt">Source</a>
+  
+</div>
+                
+
+                
+              </li>
+            
+              
+              <li data-id="0" data-triple="x86_64-unknown-linux-musl" class="install-content hidden">
+                
+                  
+                  <div class="install-code-wrapper">
+  <pre style="background-color:#263238;">
+<span style="color:#82aaff;">cargo install</span><span style="color:#89ddff;"> --</span><span style="color:#f78c6c;">locked</span><span style="color:#82aaff;"> cargo-px</span></pre>
+
+  <button class="button copy-clipboard-button primary" data-copy="cargo install --locked cargo-px">
+    <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+  </button>
+  
+  
+</div>
+                
+
+                
+              </li>
+            
+              
+              <li data-id="7" data-triple="x86_64-unknown-linux-musl" class="install-content hidden">
+                
+
+                
+                  
+                  <div class="download-wrapper">
+                    <a href="https://github.com/LukeMathWalker/cargo-px/releases/download/cargo-px-v0.1.20/cargo-px-x86_64-unknown-linux-musl.tar.xz">
+                      <button class="button primary">
+                        <span>Download</span>
+                        <span class="button-subtitle">cargo-px-x86_64-unknown-linux-musl.tar.xz</span>
+                      </button>
+                    </a>
+                  </div>
+                
+              </li>
+            
+          </ul>
+        </li>
+      
+    </ul>
+  </div>
+
+  
+    <div class="no-autodetect hidden">
+      <span class="no-autodetect-details">We weren't able to detect your OS.</span>
+    </div>
+    <noscript>
+      <a href="/cargo-px/artifacts/">View all installation options</a>
+    </noscript>
+  
+  <div class="mac-switch hidden">This project doesn't offer Apple Silicon downloads, but you can run Intel macOS binaries via Rosetta 2.</div>
+
+  
+  
+  <div class="bottom-options ">
+    <a href="/cargo-px/artifacts/" class="backup-download primary">View all installation options</a>
+    
+      <div class="arch-select hidden">
+        <select id="install-arch-select">
+          <option disabled="true" selected="true" value=""></option>
+          
+            <option value="x86_64-unknown-linux-gnu">Linux x64</option>
+          
+            <option value="aarch64-apple-darwin">macOS Apple Silicon</option>
+          
+            <option value="x86_64-apple-darwin">macOS Intel</option>
+          
+            <option value="x86_64-unknown-linux-musl">musl Linux x64</option>
+          
+            <option value="x86_64-pc-windows-msvc">Windows x64</option>
+          
+        </select>
+      </div>
+    
+  </div>
+</div>
+
+<a href="/cargo-px/artifacts/" class="button mobile-download primary">View all installation options</a>
+
+
+    <div class="oranda-hide">
+<h1>cargo-px</h1>
+<div>
+ <strong>
+   Cargo Power eXtensions
+ </strong>
+</div>
+<br>
+<div>
+  
+  <a href="https://crates.io/crates/cargo-px" rel="noopener noreferrer">
+    <img src="https://img.shields.io/crates/v/cargo-px.svg?style=flat-square" alt="Crates.io version">
+  </a>
+  
+  <a href="https://crates.io/crates/cargo-px" rel="noopener noreferrer">
+    <img src="https://img.shields.io/crates/d/cargo-px.svg?style=flat-square" alt="Download">
+  </a>
+</div>
+<br>
+</div>
+<p>Check out the <a href="https://lpalmieri.com/posts/cargo-px" rel="noopener noreferrer">announcement post</a> to learn more about <code>cargo-px</code> and the problems it solves with respect to code generation in Rust projects.</p>
+<div class="oranda-hide">
+<h1>Table of Contents</h1>
+<ol start="0">
+<li><a href="#how-to-install" rel="noopener noreferrer">How to install</a></li>
+<li><a href="#how-to-use" rel="noopener noreferrer">How to use</a></li>
+<li><a href="#verify-that-the-generated-code-is-up-to-date" rel="noopener noreferrer">Verify that the generated code is up-to-date</a></li>
+<li><a href="#license" rel="noopener noreferrer">License</a></li>
+<li><a href="#known-issues" rel="noopener noreferrer">Known issues</a></li>
+</ol>
+<h2>How To Install</h2>
+<p>Check out the instructions in the <a href="https://lukemathwalker.github.io/cargo-px/" rel="noopener noreferrer">release page</a></p>
+</div>
+<h2>How to use</h2>
+<p>It is designed as a <strong><code>cargo</code> proxy</strong>: instead of invoking <code>cargo &lt;CMD&gt; &lt;ARGS&gt;</code>, you go for <code>cargo px &lt;CMD&gt; &lt;ARGS&gt;</code>. For example, you go for <code>cargo px build --all-features</code> instead of <code>cargo build --all-features</code>.</p>
+<p><code>cargo px</code> examines your workspace every time you invoke it.<br>
+If any of your crates needs to be generated, it will invoke the respective code generators before forwarding the command and its arguments to cargo.</p>
+<p><code>cargo px</code> leverages the <a href="https://doc.rust-lang.org/cargo/reference/manifest.html#the-metadata-table" rel="noopener noreferrer"><code>metadata</code> section</a>.<br>
+In the crate that you want to see generated, you fill in the [<code>package.metadata.px.generate</code>] section as follows:</p>
+<pre style="background-color:#263238;"><span style="color:#89ddff;">[package]
+</span><span style="color:#f07178;">name </span><span style="color:#89ddff;">= "</span><span style="color:#c3e88d;">...</span><span style="color:#89ddff;">"
+</span><span style="color:#f07178;">version </span><span style="color:#89ddff;">= "</span><span style="color:#c3e88d;">...</span><span style="color:#89ddff;">"
+</span><span style="font-style:italic;color:#546e7a;"># [...]
+</span><span style="color:#eeffff;">
+</span><span style="color:#89ddff;">[package.metadata.px.generate]
+</span><span style="font-style:italic;color:#546e7a;"># The generator is a binary in the current workspace. 
+</span><span style="font-style:italic;color:#546e7a;"># It's the only generator type we support at the moment.
+</span><span style="color:#f07178;">generator_type </span><span style="color:#89ddff;">= "</span><span style="color:#c3e88d;">cargo_workspace_binary</span><span style="color:#89ddff;">"
+</span><span style="font-style:italic;color:#546e7a;"># The name of the binary.
+</span><span style="color:#f07178;">generator_name </span><span style="color:#89ddff;">= "</span><span style="color:#c3e88d;">bp</span><span style="color:#89ddff;">"
+</span><span style="font-style:italic;color:#546e7a;"># The arguments to be passed to the binary. 
+</span><span style="font-style:italic;color:#546e7a;"># It can be omitted if there are no arguments.
+</span><span style="color:#f07178;">generator_args </span><span style="color:#89ddff;">= ["</span><span style="color:#c3e88d;">--quiet</span><span style="color:#89ddff;">", "</span><span style="color:#c3e88d;">--profile</span><span style="color:#89ddff;">", "</span><span style="color:#c3e88d;">optimised</span><span style="color:#89ddff;">"]
+</span></pre>
+
+<p><code>cargo-px</code> will detect the configuration and invoke <code>cargo run --bin bp -- --quiet --profile="optimised"</code> for you.<br>
+If there are multiple crates that need to be code-generated, <code>cargo-px</code> will invoke the respective code-generators in an order that takes into account the dependency graph (i.e. dependencies are always code-generated before their dependents).</p>
+<p><code>cargo-px</code> will also set two environment variables for the code generator:</p>
+<ul>
+<li><code>CARGO_PX_GENERATED_PKG_MANIFEST_PATH</code>, the path to the <code>Cargo.toml</code> file of the crate that needs to be generated;</li>
+<li><code>CARGO_PX_WORKSPACE_ROOT_DIR</code>, the path to the <code>Cargo.toml</code> file that defines the current workspace (i.e. the one that contains the <code>[workspace]</code> section).</li>
+</ul>
+<p>You can use the <a href="https://crates.io/crates/cargo_px_env" rel="noopener noreferrer"><code>cargo_px_env</code></a> crate to retrieve and work with these environment variables.</p>
+<h2>Verify that the generated code is up-to-date</h2>
+<p>If you are committing the generated code, it might be desirable to verify in CI that it's up-to-date.<br>
+You can do so by invoking <code>cargo px verify-freshness</code>.<br>
+It will only work if you define a verifier for every code-generated project in your workspace:</p>
+<pre style="background-color:#263238;"><span style="color:#89ddff;">[package]
+</span><span style="color:#f07178;">name </span><span style="color:#89ddff;">= "</span><span style="color:#c3e88d;">...</span><span style="color:#89ddff;">"
+</span><span style="color:#f07178;">version </span><span style="color:#89ddff;">= "</span><span style="color:#c3e88d;">...</span><span style="color:#89ddff;">"
+</span><span style="font-style:italic;color:#546e7a;"># [...]
+</span><span style="color:#eeffff;">
+</span><span style="color:#89ddff;">[package.metadata.px.verify]
+</span><span style="font-style:italic;color:#546e7a;"># The verifier is a binary in the current workspace. 
+</span><span style="font-style:italic;color:#546e7a;"># It's the only verifier type we support at the moment.
+</span><span style="color:#f07178;">verifier_type </span><span style="color:#89ddff;">= "</span><span style="color:#c3e88d;">cargo_workspace_binary</span><span style="color:#89ddff;">"
+</span><span style="font-style:italic;color:#546e7a;"># The name of the binary.
+</span><span style="color:#f07178;">verifier_name </span><span style="color:#89ddff;">= "</span><span style="color:#c3e88d;">bp</span><span style="color:#89ddff;">"
+</span><span style="font-style:italic;color:#546e7a;"># The arguments to be passed to the binary. 
+</span><span style="font-style:italic;color:#546e7a;"># It can be omitted if there are no arguments.
+</span><span style="color:#f07178;">verifier_args </span><span style="color:#89ddff;">= ["</span><span style="color:#c3e88d;">--verify</span><span style="color:#89ddff;">"]
+</span></pre>
+
+<p><code>cargo-px</code> will detect the configuration and invoke <code>cargo run --bin bp -- --verify"</code> for you.<br>
+The generated package is considered up-to-date if the verifier invocation returns a <code>0</code> status code.</p>
+<p>If there are multiple crates that need to be verified, <code>cargo-px</code> will invoke the respective verifier
+in an order that takes into account the dependency graph (i.e. dependencies are always code-generated before their dependents).</p>
+<p><code>cargo-px</code> will also set two environment variables for the verifier:</p>
+<ul>
+<li><code>CARGO_PX_GENERATED_PKG_MANIFEST_PATH</code>, the path to the <code>Cargo.toml</code> file of the generated crate;</li>
+<li><code>CARGO_PX_WORKSPACE_ROOT_DIR</code>, the path to the <code>Cargo.toml</code> file that defines the current workspace (i.e. the one that contains the <code>[workspace]</code> section).</li>
+</ul>
+<p>You can use the <a href="https://crates.io/crates/cargo_px_env" rel="noopener noreferrer"><code>cargo_px_env</code></a> crate to retrieve and work with these environment variables.</p>
+<h2>Known issues</h2>
+<h3>MacOS</h3>
+<p>If you're using a macOS machine, you probably want to <a href="https://apple.stackexchange.com/questions/403184/disable-gatekeeper-notarisation-check-without-disabling-sip/403185#403185" rel="noopener noreferrer">disable gatekeeper notarisation for your terminal</a>.
+Quick guide:</p>
+<ul>
+<li>Run
+<pre style="background-color:#263238;"><span style="color:#82aaff;">spctl developer-mode enable-terminal
+</span></pre>
+
+from your terminal</li>
+<li>Then enable it in "Settings" -&gt; "Security &amp; Privacy" -&gt; "Developer Tools"</li>
+</ul>
+<p>Every time you execute a binary for the first time, Apple <a href="https://sigpipe.macromates.com/2020/macos-catalina-slow-by-design/" rel="noopener noreferrer">executes a request over the network to their servers</a>. This becomes an issue for <code>cargo-px</code>, since it must compile your generator and then execute it: the generator binary is "new", therefore it incurs the penalty of this notarisation check.<br>
+The magnitude of the delay depends on the quality of your connection as well as on Apple's servers performance. On a good Internet connection, I consistenly observed 100/150ms delays, but delays in the order of seconds have been reported as well.<br>
+Fun aside: if you're working without an Internet connection, Apple skips the check entirely and lets you execute unverified binaries without complaint.</p>
+<h2>License</h2>
+<p>Licensed under either of Apache License, Version 2.0 or MIT license at your option.
+Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in this crate by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any additional terms or conditions.</p>
+
+
+
+        </main>
+      </div>
+
+      <footer>
+        
+          <a href="https://github.com/LukeMathWalker/cargo-px"><div class="github-icon" aria-hidden="true"></div></a>
+        
+        <span>
+          cargo-px, Apache-2.0 OR MIT
+        </span>
+      </footer>
+    </div>
+
+    
+      <script defer="true" data-domain="lukemathwalker.github.io" src="https://plausible.io/js/script.js"></script>
+    
+    
+
+    
+
+    <script src="/cargo-px/artifacts.js"></script>
+
+
+  </body>
+</html>
