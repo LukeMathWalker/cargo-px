@@ -1,3 +1,7 @@
+> [!IMPORTANT]
+> **`cargo-px` has moved to [LukeMathWalker/officina](https://github.com/LukeMathWalker/officina/tree/main/cargo-px).**
+> This repository is archived: development, issues and releases continue there. Its crates on crates.io are unaffected.
+
 <div class="oranda-hide">
 <h1 align="center">cargo-px</h1>
 <div align="center">
